@@ -29,7 +29,7 @@ desc('Generating source-code documentaion');
 task('docs', [], function() {
   runCommands([
     ['cd', '"'+__dirname+'"'],
-    ['docco', 'lib/*.js']
+    ['rocco', 'lib/*.js']
   ], 'Documentation generated!');
 });
 
