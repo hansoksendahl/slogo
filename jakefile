@@ -16,7 +16,7 @@ task('update', [], function() {
 });
 
 desc('Commits any changes to Github');
-task('deploy', ['update'], function () {
+task('deploy', ['update', 'docs'], function () {
   runCommands([
     ['cd', '"'+__dirname+'"'],
     ['git', 'add', '.'],
@@ -27,7 +27,10 @@ task('deploy', ['update'], function () {
 
 desc('Generating source-code documentaion');
 task('docs', [], function() {
-  commands = 'cd '+__dirname+' '+buildCommandString([])
+  runCommands([
+    ['cd', '"'+__dirname+'"'],
+    ['docco', 'lib/*.js']
+  ], 'Documentation generated!');
 });
 
 function buildCommandString(commands) {
