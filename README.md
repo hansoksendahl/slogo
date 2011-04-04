@@ -6,7 +6,7 @@ addition in a large family of LOGO style grammars.  Slogo is built on the [Jison
 
 Structure
 ---------
-<img src="http://www.mediafire.com/imgbnc.php/9b80aee3375aa5e9a97aa49d9a2de82f32b3688138477c6255deab863ec1fd2d6g.jpg" alt="Slogo Grammar Diagram">
+<img src="http://www.mediafire.com/imgbnc.php/9b80aee3375aa5e9a97aa49d9a2de82f32b3688138477c6255deab863ec1fd2d4g.jpg" alt="Slogo Grammar Diagram">
 
     . .
      \_\

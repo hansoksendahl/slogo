@@ -1,0 +1,3 @@
+[submodule "ext/jison"]
+	path = ext/jison
+	url = git://github.com/zaach/jison.git
