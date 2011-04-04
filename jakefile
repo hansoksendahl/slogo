@@ -14,15 +14,15 @@ task('update', [], function() {
 
 desc('Commits any changes to Github');
 task('deploy', [], function () {
+  sys.puts('Deploying...')
   commands = 'cd '+__dirname+' '+buildCommandString([
     ['git', 'pull'],
     ['git', 'add', '.'],
     ['git', 'commit', '-a', '-m', '"built on: '+(new Date())+'"', '--no-verify'],
     ['git', 'push', 'github', 'master']
   ]);
-  console.log(commands);
   ps.exec(commands, [], function() {
-    sys.log('Deployed');
+    sys.log('Deployed!');
   });
 });
 
