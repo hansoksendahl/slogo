@@ -1,0 +1,36 @@
+var sys = require('sys'),
+    ps  = require('child_process');
+
+// desc('This is the default task.');
+// task('default', [], function () {
+//   sys.puts('This is the default task.');
+//   sys.puts(sys.inspect(arguments));
+// });
+
+desc('Updates submodules in the ./ext directory');
+task('update', [], function() {
+  sys.puts('I hate hippies');
+});
+
+desc('Commits any changes to Github');
+task('deploy', [], function () {
+  commands = 'cd '+__dirname+' '+buildCommandString([
+    ['git', 'pull'],
+    ['git', 'add', '.'],
+    ['git', 'commit', '-a', '-m', '"built on: '+(new Date())+'"', '--no-verify'],
+    ['git', 'push', 'github', 'master']
+  ]);
+  console.log(commands);
+  ps.exec(commands);
+  sys.log('Deployed...')
+});
+
+desc('Generating source-code documentaion');
+task('docs', [], function() {
+});
+
+function buildCommandString(commands) {
+  return commands.map(function(command) {
+    return command.join(" ");
+  }).join(" && ");
+}

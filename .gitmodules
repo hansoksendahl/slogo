@@ -1,6 +1,3 @@
-[submodule "ext/jison"]
-	path = ext/jison
-	url = git://github.com/zaach/jison.git
 [submodule "ext/node-jslint"]
 	path = ext/node-jslint
 	url = git://github.com/reid/node-jslint.git
