@@ -23,7 +23,8 @@ task('update', [], function() {
 desc('Commits any changes to Github');
 task('deploy', [], function () {
   sys.puts('Deploying...')
-  commands = 'cd '+__dirname+' '+buildCommandString([
+  commands = buildCommandString([
+    ['cd', '"'+__dirname+'"'],
     ['git', 'pull', 'github', 'master'],
     ['git', 'add', '.'],
     ['git', 'commit', '-a', '-m', '"built on: '+(new Date())+'"', '--no-verify'],
@@ -45,11 +46,4 @@ function buildCommandString(commands) {
   return commands.map(function(command) {
     return command.join(" ");
   }).join(" && ");
-}
-
-console.log('cd '+__dirname+' '+buildCommandString([
-    ['git', 'pull', 'github', 'master'],
-    ['git', 'add', '.'],
-    ['git', 'commit', '-a', '-m', '"built on: '+(new Date())+'"', '--no-verify'],
-    ['git', 'push', 'github', 'master']
-  ]));
+};
