@@ -27,8 +27,9 @@ task('deploy', [], function () {
     ['git', 'commit', '-a', '-m', '"built on: '+(new Date())+'"', '--no-verify'],
     ['git', 'push', 'github', 'master']
   ]);
-  ps.exec(commands, [], function() {
-    sys.log('Deployed!');
+  ps.exec(commands, [], function(error, stdout, stderr) {
+    var message = error || 'Deployed!';
+    sys.log(message);
   });
 });
 
