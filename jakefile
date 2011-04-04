@@ -13,8 +13,10 @@ task('update', [], function() {
   commands = 'cd '+__dirname+' '+buildCommandString([
     ['git', 'pull', 'github', 'master']
   ]);
-  ps.exec(commands, [], function() {
-    sys.puts('Updated.');
+  ps.exec(commands, [], function(err, stdout, stderr) {
+    // To err is human
+    var message = err || 'Deployed!';
+    sys.log(message);
   });
 });
 
@@ -27,8 +29,9 @@ task('deploy', [], function () {
     ['git', 'commit', '-a', '-m', '"built on: '+(new Date())+'"', '--no-verify'],
     ['git', 'push', 'github', 'master']
   ]);
-  ps.exec(commands, [], function(error, stdout, stderr) {
-    var message = error || 'Deployed!';
+  ps.exec(commands, [], function(err, stdout, stderr) {
+    // To err is human
+    var message = err || 'Deployed!';
     sys.log(message);
   });
 });
@@ -43,3 +46,10 @@ function buildCommandString(commands) {
     return command.join(" ");
   }).join(" && ");
 }
+
+console.log('cd '+__dirname+' '+buildCommandString([
+    ['git', 'pull', 'github', 'master'],
+    ['git', 'add', '.'],
+    ['git', 'commit', '-a', '-m', '"built on: '+(new Date())+'"', '--no-verify'],
+    ['git', 'push', 'github', 'master']
+  ]));
