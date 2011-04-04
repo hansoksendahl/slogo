@@ -21,8 +21,9 @@ task('deploy', [], function () {
     ['git', 'push', 'github', 'master']
   ]);
   console.log(commands);
-  ps.exec(commands);
-  sys.log('Deployed...')
+  ps.exec(commands, [], function() {
+    sys.log('Deployed');
+  });
 });
 
 desc('Generating source-code documentaion');
