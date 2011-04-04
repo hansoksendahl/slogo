@@ -9,14 +9,20 @@ var sys = require('sys'),
 
 desc('Updates submodules in the ./ext directory');
 task('update', [], function() {
-  sys.puts('I hate hippies');
+  sys.puts('Updating...');
+  commands = 'cd '+__dirname+' '+buildCommandString([
+    ['git', 'pull', 'github', 'master']
+  ]);
+  ps.exec(commands, [], function() {
+    sys.puts('Updated.');
+  });
 });
 
 desc('Commits any changes to Github');
 task('deploy', [], function () {
   sys.puts('Deploying...')
   commands = 'cd '+__dirname+' '+buildCommandString([
-    ['git', 'pull'],
+    ['git', 'pull', 'github', 'master'],
     ['git', 'add', '.'],
     ['git', 'commit', '-a', '-m', '"built on: '+(new Date())+'"', '--no-verify'],
     ['git', 'push', 'github', 'master']
@@ -28,6 +34,7 @@ task('deploy', [], function () {
 
 desc('Generating source-code documentaion');
 task('docs', [], function() {
+  commands = 'cd '+__dirname+' '+buildCommandString([])
 });
 
 function buildCommandString(commands) {
