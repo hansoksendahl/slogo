@@ -10,22 +10,17 @@ var sys = require('sys'),
 desc('Updates submodules in the ./ext directory');
 task('update', [], function() {
   sys.puts('Updating...');
-  commands = 'cd '+__dirname+' '+buildCommandString([
+  runCommands([
+    ['cd', '"'+__dirname+'"'],
     ['git', 'pull', 'github', 'master']
-  ]);
-  ps.exec(commands, [], function(err, stdout, stderr) {
-    // To err is human
-    var message = err || 'Deployed!';
-    sys.log(message);
-  });
+  ], 'Updated!');
 });
 
 desc('Commits any changes to Github');
-task('deploy', [], function () {
+task('deploy', ['update'], function () {
   sys.puts('Deploying...')
   runCommands([
     ['cd', '"'+__dirname+'"'],
-    ['git', 'pull', 'github', 'master'],
     ['git', 'add', '.'],
     ['git', 'commit', '-a', '-m', '"built on: '+(new Date())+'"', '--no-verify'],
     ['git', 'push', 'github', 'master']
