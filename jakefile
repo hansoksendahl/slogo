@@ -9,7 +9,6 @@ var sys = require('sys'),
 
 desc('Updates submodules in the ./ext directory');
 task('update', [], function() {
-  sys.puts('Updating...');
   runCommands([
     ['cd', '"'+__dirname+'"'],
     ['git', 'pull', 'github', 'master']
@@ -18,7 +17,6 @@ task('update', [], function() {
 
 desc('Commits any changes to Github');
 task('deploy', ['update'], function () {
-  sys.puts('Deploying...')
   runCommands([
     ['cd', '"'+__dirname+'"'],
     ['git', 'add', '.'],
