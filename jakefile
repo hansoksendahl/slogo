@@ -23,18 +23,13 @@ task('update', [], function() {
 desc('Commits any changes to Github');
 task('deploy', [], function () {
   sys.puts('Deploying...')
-  commands = buildCommandString([
+  runCommands([
     ['cd', '"'+__dirname+'"'],
     ['git', 'pull', 'github', 'master'],
     ['git', 'add', '.'],
     ['git', 'commit', '-a', '-m', '"built on: '+(new Date())+'"', '--no-verify'],
     ['git', 'push', 'github', 'master']
-  ]);
-  ps.exec(commands, [], function(err, stdout, stderr) {
-    // To err is human
-    var message = err || 'Deployed!';
-    sys.log(message);
-  });
+  ], 'Deployed!');
 });
 
 desc('Generating source-code documentaion');
@@ -47,3 +42,10 @@ function buildCommandString(commands) {
     return command.join(" ");
   }).join(" && ");
 };
+
+function runCommands(commands, success) {
+  ps.exec(buildCommandString(commands), [], function(err) {
+    var message = err || success;
+    sys.log(message);
+  })
+}
