@@ -16,7 +16,7 @@ task('update', [], function() {
 });
 
 desc('Commits any changes to Github');
-task('deploy', ['update', 'docs'], function () {
+task('deploy', [], function () {
   runCommands([
     ['cd', '"'+__dirname+'"'],
     ['git', 'add', '.'],
