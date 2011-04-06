@@ -30,10 +30,13 @@ task('deploy', [], function () {
 desc('Generating source-code documentaion');
 task('docs', [], function() {
   runCommands([
+    ['git', 'checkout', 'master'],
+    ['./ext/docco/bin/docco', './lib/*.js'],
     ['cd', '"'+__dirname+'"'],
     // switch to the gh-pages branch
     ['git', 'checkout', 'gh-pages'],
     // ext/ gets pulled from the master branch for some reason, remove it
+    // this is probably due to submodule definitions
     ['rm', '-rf', './ext'],
     ['echo', '" "', '>>', 'index.html'],
     ['git', 'add', '.'],
