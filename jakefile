@@ -11,7 +11,8 @@ desc('Updates submodules in the ./ext directory');
 task('update', [], function() {
   runCommands([
     ['cd', '"'+__dirname+'"'],
-    ['git', 'pull', 'github', 'master']
+    ['git', 'pull', 'origin', 'master'],
+    ['git', 'submodule', 'update']
   ], 'Updated!');
 });
 
@@ -30,9 +31,9 @@ task('deploy', [], function () {
 desc('Generating source-code documentaion');
 task('docs', [], function() {
   runCommands([
+    ['cd', '"'+__dirname+'"'],
     ['git', 'checkout', 'master'],
     ['./ext/docco/bin/docco', './lib/*.js'],
-    ['cd', '"'+__dirname+'"'],
     // switch to the gh-pages branch
     ['git', 'checkout', 'gh-pages'],
     ['echo', '" "', '>>', 'index.html'],
@@ -40,7 +41,8 @@ task('docs', [], function() {
     ['git', 'add', './docs'],
     ['git', 'commit', '-a', '-m', '"built on: '+(new Date())+'"', '--no-verify'],
     ['git', 'push', 'origin', 'gh-pages'],
-    ['git', 'checkout', 'master']
+    ['git', 'checkout', 'master'],
+    ['rm', '-rf', './docs']
   ], 'Documentation generated!');
 });
 
