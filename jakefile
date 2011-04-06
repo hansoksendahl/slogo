@@ -20,6 +20,7 @@ desc('Commits any changes to Github');
 task('deploy', [], function () {
   runCommands([
     ['cd', '"'+__dirname+'"'],
+    ['echo', '" "', '>>', 'README'],
     ['git', 'add', '.'],
     ['git', 'commit', '-a', '-m', '"built on: '+(new Date())+'"', '--no-verify'],
     ['git', 'push', 'origin', 'master']
