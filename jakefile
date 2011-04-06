@@ -21,7 +21,7 @@ task('deploy', [], function () {
     ['cd', '"'+__dirname+'"'],
     ['git', 'add', '.'],
     ['git', 'commit', '-a', '-m', '"built on: '+(new Date())+'"', '--no-verify'],
-    ['git', 'push', 'github', 'master']
+    ['git', 'push', 'origin', 'master']
   ], 'Deployed!');
 });
 
