@@ -35,7 +35,7 @@ task('docs', [], function() {
     ['git', 'checkout', 'gh-pages'],
     // ext/ gets pulled from the master branch for some reason, remove it
     ['rm', '-rf', './ext'],
-    ['echo', '" "', '>', 'index.html']
+    ['echo', '" "', '>>', 'index.html']
     ['git', 'add', '.'],
     ['git', 'commit', '-a', '-m', '"built on: '+(new Date())+'"', '--no-verify'],
     // ['git', 'push', 'origin', 'gh-pages'],
