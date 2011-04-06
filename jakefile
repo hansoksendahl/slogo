@@ -29,7 +29,7 @@ desc('Generating source-code documentaion');
 task('docs', [], function() {
   runCommands([
     ['cd', '"'+__dirname+'"'],
-    ['rocco', 'lib/*.js']
+    ['git', 'checkout', 'origin', 'gh-pages']
   ], 'Documentation generated!');
 });
 
