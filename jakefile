@@ -37,7 +37,7 @@ task('docs', [], function() {
     ['git', 'checkout', 'gh-pages'],
     ['echo', '" "', '>>', 'index.html'],
     ['git', 'add', 'index.html'],
-    ['git', 'add', './docs']
+    ['git', 'add', './docs'],
     ['git', 'commit', '-a', '-m', '"built on: '+(new Date())+'"', '--no-verify'],
     ['git', 'push', 'origin', 'gh-pages'],
     ['git', 'checkout', 'master']
