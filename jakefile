@@ -35,11 +35,9 @@ task('docs', [], function() {
     ['cd', '"'+__dirname+'"'],
     // switch to the gh-pages branch
     ['git', 'checkout', 'gh-pages'],
-    // ext/ gets pulled from the master branch for some reason, remove it
-    // this is probably due to submodule definitions
-    ['rm', '-rf', './ext'],
     ['echo', '" "', '>>', 'index.html'],
-    ['git', 'add', '.'],
+    ['git', 'add', 'index.html'],
+    ['git', 'add', './docs']
     ['git', 'commit', '-a', '-m', '"built on: '+(new Date())+'"', '--no-verify'],
     ['git', 'push', 'origin', 'gh-pages'],
     ['git', 'checkout', 'master']
