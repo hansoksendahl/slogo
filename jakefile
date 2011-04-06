@@ -38,7 +38,7 @@ task('docs', [], function() {
     ['echo', '" "', '>>', 'index.html'],
     ['git', 'add', '.'],
     ['git', 'commit', '-a', '-m', '"built on: '+(new Date())+'"', '--no-verify'],
-    // ['git', 'push', 'origin', 'gh-pages'],
+    ['git', 'push', 'origin', 'gh-pages'],
     ['git', 'checkout', 'master']
   ], 'Documentation generated!');
 });
