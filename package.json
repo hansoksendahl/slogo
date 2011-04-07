@@ -1,0 +1,56 @@
+{
+	"name": "Slogo",
+	"version": "0.0.1",
+	"description": "LOGO grammar for Javascript",
+	"keywords": [
+		 "package",
+		 "logo",
+     "jison"
+	],
+	"maintainers": [
+		 {
+				"name": "Hans Oksendahl",
+				"email": "hansoksendahl@gmail.com",
+				"web": "http://hansoksendahl.com" 
+		 } 
+	],
+	"contributors": [
+	],
+	"bugs": {
+		 "mail": "hansoksendahl@gmail.com",
+		 "web": "https://github.com/hansineffect/Slogo/issues" 
+	},
+	"licenses": [
+		 {
+				"type": "MIT",
+				"url": "https://github.com/hansineffect/Slogo/raw/master/COPYING" 
+		 } 
+	],
+	"repositories": [
+		 {
+				"type": "git",
+				"url": "git://github.com/hansineffect/Slogo.git" 
+		 } 
+	],
+	"dependencies": {
+		 "webkit": "1.2",
+		 "ssl": {
+				"gnutls": ["1.0", "2.0"],
+				"openssl": "0.9.8" 
+		 } 
+	},
+	"implements": ["cjs-module-0.3"],
+	"os": ["linux", "macos", "win"],
+	"cpu": ["x86", "ppc", "x86_64"],
+	"engines": ["v8", "node"],
+	"scripts": {
+		 "scanner": "parser.js",
+		 "parser": "parser.js",
+		 "build": "build.js",
+		 "test": "test.js" 
+	},
+	"directories": {
+		 "lib": "lib",
+		 "ext": "ext"
+	} 
+}
