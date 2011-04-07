@@ -31,7 +31,6 @@ desc('Generating source-code documentaion');
 task('docs', [], function() {
   runCommands([
     ['cd', '"'+__dirname+'"'],
-    ['git', 'checkout', 'master'],
     ['./ext/docco/bin/docco', './lib/*.js'],
     // switch to the gh-pages branch
     ['git', 'checkout', 'gh-pages'],
