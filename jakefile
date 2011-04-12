@@ -27,13 +27,17 @@ task('deploy', [], function () {
   ], 'Deployed!');
 });
 
+// Unfortunately I have to be extremely explicit in these instructions because
+// permissions are screwed up in my development directory (Thanks a lot
+// Virtualbox!)
 desc('Generating source-code documentaion');
 task('docs', [], function() {
   runCommands([
     ['cd', '"'+__dirname+'"'],
     ['./ext/docco/bin/docco', './lib/*.js'],
-    // switch to the gh-pages branch
     ['mv', './docs', '/tmp/docs'],
+    ['git', 'stash'],
+    // switch to the gh-pages branch
     ['git', 'checkout', 'gh-pages'],
     ['git', 'rm', '-r', './docs'],
     ['mv', '/tmp/docs', '.'],
@@ -44,7 +48,7 @@ task('docs', [], function() {
     ['git', 'commit', '-a', '-m', '"built on: '+(new Date())+'"', '--no-verify'],
     ['git', 'push'],
     ['git', 'checkout', 'master'],
-    ['rm', '-rf', './docs']
+    ['git', 'stash', 'apply'],
   ], 'Documentation generated!');
 });
 
