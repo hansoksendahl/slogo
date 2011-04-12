@@ -33,10 +33,14 @@ task('docs', [], function() {
     ['cd', '"'+__dirname+'"'],
     ['./ext/docco/bin/docco', './lib/*.js'],
     // switch to the gh-pages branch
+    ['mv', './docs', '/tmp/docs'],
     ['git', 'checkout', 'gh-pages'],
+    ['git', 'rm', './docs'],
+    ['mv', '/tmp/docs', '.'],
+    ['git', 'add', './docs'],
+    // ensure we have SOMETHING to commit
     ['echo', '" "', '>>', 'index.html'],
     ['git', 'add', 'index.html'],
-    ['git', 'add', './docs'],
     ['git', 'commit', '-a', '-m', '"built on: '+(new Date())+'"', '--no-verify'],
     ['git', 'push', 'origin', 'gh-pages'],
     ['git', 'checkout', 'master'],
