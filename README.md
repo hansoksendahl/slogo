@@ -42,6 +42,7 @@ number of ways:
 
     `50% == 0.50`
 
-5. The modulus operator is still an operator but it has a longer name
+5. The `[modulus](http://en.wikipedia.org/wiki/Modulo_operation)` operator is 
+    still an operator but it has a longer name
 
     `3 mod 2 == 1`
