@@ -6,7 +6,7 @@
                                                          S
                                                       sSSs
 
-Slogo is a multi-agent programmable modeling environment for WebGL.
+**Slogo** is a multi-agent programmable modeling environment for WebGL.
 
 It simplifies much of the tasks involved with developing online simulations.
 
