@@ -1,8 +1,10 @@
-    . .	 	
-     \_\	 	
-     (_ `.,--.__ 	
-      \  (__.'  `.
-       `~~~~~~~~~~' ~~ ~~ ~~ ~~ ~~ Slogo	 	
+    . .	 	                         sSSs s
+     \_\	 	                       S    S
+     (_ `.,--.__ 	                 sSSs S sSSs sSSs sSSs
+      \  (__.'  `.                    S S S  S S  S S  S
+       `~~~~~~~~~~' ~~ ~~ ~~ ~~ ~~ sSSs~s~sSSs~sSSS~sSSs
+                                                  S
+                                               sSSs
 
 Slogo is a multi-agent programmable modeling environment for WebGL.
 
