@@ -21,9 +21,9 @@ number of ways:
 1. In Slogo every math constant and function is directly available in
   the main namespace.
 
-  `PI == 3.141592653589793`
+    `PI == 3.141592653589793`
 
-  `max 2, 5, 3 == 5`
+    `max 2, 5, 3 == 5`
 
 2. Exponents have their own operator, the `^` operator
 
