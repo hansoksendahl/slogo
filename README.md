@@ -31,12 +31,12 @@ number of ways:
 
 3. Factorials have their own operator, the `!` operator
 
-   `4! == 4 * 3 * 2 * 1`
+    `4! == 4 * 3 * 2 * 1`
 
 4. The percent sign is used for percentages.
 
-   `50% == 0.50`
+    `50% == 0.50`
 
 5. The modulus operator is still an operator but it has a longer name
 
-   `3 mod 2 == 1`
+    `3 mod 2 == 1`
