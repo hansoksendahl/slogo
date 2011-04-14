@@ -1,14 +1,15 @@
     . .                            sSSs   s
      \_\                           S      S
-     (_ `.,--.__                   sSSs   S   sSSs    sSSs   sSSs
-      \  (__.'  `.                    S   S   S  S    S  S   S  S
-       `~~~~~~~~~~' ~~ ~~ ~~ ~~ ~~ sSSs~~~s~~~sSSs~~~~sSSS~~~sSSs
-                                                         S
-                                                      sSSs
+     (_ `.,--.__                   sSSs   S   sSSs   sSSs   sSSs
+      \  (__.'  `.                    S   S   S  S   S  S   S  S
+       `~~~~~~~~~~' ~~ ~~ ~~ ~~ ~~ sSSs~~~s~~~sSSs~~~sSSS~~~sSSs
+                                                        S
+                                                     sSSs
 
 **Slogo** is a multi-agent programmable modeling environment for WebGL.
 
-It simplifies much of the tasks involved with developing online simulations.
+It simplifies many of the tasks involved with developing scientific simulations
+online it leverages Javascript, Logo, and the Jison parser generator .
 
 Slogo sits on top of a stack that looks like this.
 
