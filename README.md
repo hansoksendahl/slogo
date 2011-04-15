@@ -16,9 +16,9 @@ produces WebGL graphics.
 Slogo sits on top of a stack that looks like this.
 
 ### Math constants and functions
-The ([MDN Documentation](https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Math))
-for Javascript's Math object is worth looking up because we retain many
-of Javascript's math constants and functions.
+The Mozilla Developer Center [documentation](https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Math)
+for Javascript's Math object is worth looking up because we retain many of
+Javascript's math constants and functions.
 
 In regards to math the syntax of Slogo differs from Javascript in a
 number of ways:
