@@ -7,7 +7,9 @@
 <p><code>[NUMBER]!</code></p>             </td>             <td class="code">               <div class="highlight"><pre><span class="nx">exports</span><span class="p">.</span><span class="nx">factorial</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">n</span><span class="p">)</span> <span class="p">{</span>
   <span class="k">return</span> <span class="nx">n</span><span class="o">==</span><span class="mi">0</span> <span class="o">?</span> <span class="mi">1</span> <span class="o">:</span> <span class="nx">arguments</span><span class="p">.</span><span class="nx">callee</span><span class="p">(</span><span class="nx">n</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="nx">n</span><span class="p">;</span>
 <span class="p">};</span></pre></div>             </td>           </tr>                               <tr id="section-4">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-4">&#182;</a>               </div>               <p>The <code>total</code> function is used by <code>sum</code>, <code>difference</code>, <code>product</code>, and
-<code>quotient</code> functions</p>             </td>             <td class="code">               <div class="highlight"><pre><span class="kd">var</span> <span class="nx">total</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">args</span><span class="p">,</span> <span class="nx">func</span><span class="p">)</span> <span class="p">{</span>
+<code>quotient</code> functions.  This function takes a list of numbers and a operating
+function it then iterates through numbers applying the operation to each
+resulting.</p>             </td>             <td class="code">               <div class="highlight"><pre><span class="kd">var</span> <span class="nx">total</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">args</span><span class="p">,</span> <span class="nx">func</span><span class="p">)</span> <span class="p">{</span>
   <span class="kd">var</span>
     <span class="nx">args</span>   <span class="o">=</span> <span class="nb">Array</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">slice</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">args</span><span class="p">);</span>
     <span class="nx">result</span> <span class="o">=</span> <span class="nx">args</span><span class="p">.</span><span class="nx">shift</span><span class="p">();</span>
@@ -36,7 +38,9 @@
   <span class="p">});</span>
 <span class="p">};</span></pre></div>             </td>           </tr>                               <tr id="section-8">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-8">&#182;</a>               </div>               <h3>Quotient function</h3>
 
-<p><code>quotient 10, 2, 2 == 2.5</code></p>             </td>             <td class="code">               <div class="highlight"><pre><span class="nx">exports</span><span class="p">.</span><span class="nx">quotient</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+<p><code>quotient 10, 2, 2 == 2.5</code></p>
+
+<p><strong>Remember: Friends don't let friends divide by zero.</strong></p>             </td>             <td class="code">               <div class="highlight"><pre><span class="nx">exports</span><span class="p">.</span><span class="nx">quotient</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
   <span class="k">return</span> <span class="nx">total</span><span class="p">(</span><span class="nx">arguments</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">)</span> <span class="p">{</span>
     <span class="k">return</span> <span class="nx">a</span> <span class="o">/=</span> <span class="nx">b</span><span class="p">;</span>
   <span class="p">});</span>
