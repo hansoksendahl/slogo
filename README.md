@@ -21,7 +21,9 @@ for Javascript's Math object is worth looking up because we retain many of
 Javascript's math constants and functions.
 
 In regards to math the syntax of Slogo differs from Javascript in a
-number of ways:
+number of ways.  Namely one design consideration is that math functions are
+first class citizens in Slogo.  The idea is that we're here to do math primarily
+and develop code secondarily.
 
 1. In Slogo every math constant and function is directly available in
   the main namespace.
@@ -46,3 +48,8 @@ number of ways:
     still an operator but it has a longer name
 
     `3 mod 2 == 1`
+
+### Bitwise operators
+We have four bitwise operators in Slogo.
+
+`and`, `or`, `xor`, `not`
