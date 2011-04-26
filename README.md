@@ -10,10 +10,14 @@
 
 It simplifies the process of developing scientific simulations online. Slogo is
 a formal grammar which leverages Javascript, WebGL and the [Jison parser
-generator](http://github.com/zaach/jison) to produce a formal grammar which
-produces WebGL graphics.
+generator](http://github.com/zaach/jison) to simplify creating WebGL powered
+simulations.
 
 Slogo sits on top of a stack that looks like this.
+
+    _Node.js_ - Build Platform
+      Jison - Parser Gernerator
+        Slogo - Our Grammar
 
 ### Math constants and functions
 The Mozilla Developer Center [documentation](https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Math)
@@ -53,3 +57,11 @@ and develop code secondarily.
 We have four bitwise operators in Slogo.
 
 `and`, `or`, `xor`, `not`
+
+true and false == false
+
+true or false == true
+
+true xor false == true
+
+true not false == true

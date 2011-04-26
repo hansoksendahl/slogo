@@ -1,0 +1,135 @@
+<!-- Markup generators make you so damn lazy -->
+
+<!-- Writing all of this markup was like running a marathon for me. -Hans -->
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Slogo</title>
+    <link type="text/css" href="./styles/import.css" rel="stylesheet">
+    <link type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.11/themes/base/jquery-ui.css" rel="stylesheet">
+  </head>
+
+  <body>
+    <section id="app">
+      <header class="tabs">
+        <ul>
+          <li><a href="#tabs-1">Application</a></li>
+          <li><a href="#tabs-2">Documentation</a></li>
+          <li><a href="#tabs-3">Source Code</a></li>
+        </ul>
+      </header>
+
+      <section id="tabs-1">
+        <section id="tab1-toolbar" class="toolbar ui-widget-header ui-corner-all">
+          <button id="newControl">New Control</button>
+          <div class="slider" id="speed"></div>
+          <span id="updateOn" class="buttonset">
+            <input checked="checked" id="continuous" name="updateOn" type="radio" value="continuous">
+            <label for="continuous">continuous</label>
+            <input id="ticks" name="updateOn" type="radio" value="on ticks">
+            <label for="ticks">on ticks</label>
+          </span>
+          <button id="settings">Settings</button>
+          <br class="clear">
+        </section>
+
+        <section id="controls" class="">
+        test
+        </section>
+        <div id="universe">
+          <canvas id="world"></canvas>
+        </div>
+        <br class="clear">
+      </section>
+
+      <section id="tabs-2">
+        <textarea id="projectDocsEdit">
+# Documentation
+
+Slogo uses the [Showdown](https://github.com/coreyti/showdown) library.  Showdown is a Javascript variant of
+[Markdown](http://daringfireball.net/projects/markdown/syntax), it makes producing nice looking documentation easy.
+
+## Instructions
+
+This file serves as its own instruction manual.  Click on this text to edit...
+
+...Click somewhere else to view your changes.
+
+## Markdown Syntax
+
+### Links
+
+Links like [this one](http://google.com) are easy to produce with Markdown.
+
+### Images
+
+![Sword fern fiddlehead](http://j.mp/fFR7Gi 'Sword fern fiddlehead')
+
+### Lists
+
+Markdown can produce un-ordered lists.
+
+* oranges
+* apples
+* bananas
+
+Markdown can make ordered lists too.
+
+1. read
+2. eat
+3. sleep
+
+### Blockquotes
+
+> Blockquotes aren't all that hard with Markdown.
+
+### Code
+
+Code can be `written.inline()`.
+
+    code.blocks(
+      are("easy", "too")
+    );
+</textarea>
+      </section>
+
+      <section id="tabs-3">
+        <textarea id="sourceCode">
+# Code goes here.
+</textarea>
+        <canvas id="world"></canvas>
+      </section>
+
+      <footer class="ui-widget-header ui-corner-all">
+        <div id="theme">
+          <label for="themeChanger">Theme:</label>
+          <select id="themeChanger">
+          </select>
+        </div>
+        <div id="copyright">Hans Oksendahl, 2011. <a href="http://www.opensource.org/licenses/mit-license.php">MIT User License</a></div>
+        <br class="clear">
+      </footer>
+
+    </section>
+
+    <!-- We're going jQuery this round -->
+
+    <!-- Include jQuery & jQuery UI -->
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.11/jquery-ui.min.js"></script>
+
+    <!-- Include our scripts and plugins -->
+
+    <!-- Jeremy Hynds "create" event for jQuery -->
+    <script type="text/javascript" src="./scripts/jquery-create-event.js"></script>
+
+    <!-- My JSS Plugin -->
+    <script type="text/javascript" src="./scripts/jquery-jss.js"></script>
+
+    <!-- Showdown the Markdown library for Javascript -->
+    <script type="text/javascript" src="https://github.com/coreyti/showdown/raw/master/src/showdown.js"></script>
+
+    <!-- Our app script -->
+    <script type="text/javascript" src="./scripts/app.js"></script>
+  </body>
+</html>
