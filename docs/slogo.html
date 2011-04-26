@@ -1,0 +1,484 @@
+<!DOCTYPE html>  <html> <head>   <title>slogo.js</title>   <meta http-equiv="content-type" content="text/html; charset=UTF-8">   <link rel="stylesheet" media="all" href="docco.css" /> </head> <body>   <div id="container">     <div id="background"></div>            <div id="jump_to">         Jump To &hellip;         <div id="jump_wrapper">           <div id="jump_page">                                           <a class="source" href="grammar.html">                 grammar.js               </a>                                           <a class="source" href="scope.html">                 scope.js               </a>                                           <a class="source" href="slogo.html">                 slogo.js               </a>                        </div>         </div>       </div>          <table cellpadding="0" cellspacing="0">       <thead>         <tr>           <th class="docs">             <h1>               slogo.js             </h1>           </th>           <th class="code">           </th>         </tr>       </thead>       <tbody>                               <tr id="section-1">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-1">&#182;</a>               </div>               <h1>Slogo</h1>
+
+<p>. .
+    _\
+    (_ <code>.,--.__
+     \  (__.'</code>.
+      `~~~~~~~~~~' ~~ ~~ ~~</p>
+
+<p>Slogo is a framework for wegGL.  It acts as a javascript interface for common
+WebGL tasks.</p>             </td>             <td class="code">               <div class="highlight"><pre></pre></div>             </td>           </tr>                               <tr id="section-2">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-2">&#182;</a>               </div>               <h2>The Slogo class</h2>
+
+<p><em>Note: it's wrapped in a closure like a protective layer of mucus</em>.</p>             </td>             <td class="code">               <div class="highlight"><pre><span class="kd">var</span> <span class="nx">Slogo</span> <span class="o">=</span> <span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span></pre></div>             </td>           </tr>                               <tr id="section-3">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-3">&#182;</a>               </div>               <h3>Constructor function</h3>
+
+<p>If we have an element reference then we use it, otherwise we use the first
+canvas element on the page.  We fail <em>nicely</em> if the browser doesn't
+support WebGL.</p>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="kd">var</span> <span class="nx">slogo</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">canvas</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">canvas</span> <span class="o">=</span> <span class="nx">canvas</span> <span class="o">||</span> <span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">getElementsByTagName</span><span class="p">(</span><span class="s1">&#39;canvas&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">];</span>
+    <span class="k">try</span> <span class="p">{</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">gl</span> <span class="o">=</span> <span class="nx">canvas</span><span class="p">.</span><span class="nx">getContext</span><span class="p">(</span><span class="s1">&#39;experimental-webgl&#39;</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">catch</span> <span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="p">{}</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span> <span class="k">this</span><span class="p">.</span><span class="nx">gl</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">alert</span><span class="p">(</span><span class="s1">&#39;Doh! Your browser doesn\&#39;t support WebGL.\n\nTry one of the many others that do (i.e. Chrome, Firefox, Safari, Opera).&#39;</span><span class="p">);</span>
+    <span class="p">}</span>
+  <span class="p">};</span>
+
+  <span class="nx">slogo</span><span class="p">.</span><span class="nx">prototype</span> <span class="o">=</span> <span class="p">{</span></pre></div>             </td>           </tr>                               <tr id="section-4">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-4">&#182;</a>               </div>               <h3>resizeTo</h3>
+
+<p>Resizes the canvas and gl viewport.  Perfect for binding to
+<code>window.onResize</code>.</p>
+
+<pre><code>resizeTo(x, y)
+resizeTo('css')
+</code></pre>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="nx">resizeTo</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">x</span><span class="p">,</span> <span class="nx">y</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">x</span> <span class="o">==</span> <span class="s1">&#39;css&#39;</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">x</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">gl</span><span class="p">.</span><span class="nx">canvas</span><span class="p">.</span><span class="nx">offsetWidth</span><span class="p">;</span>
+        <span class="nx">y</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">gl</span><span class="p">.</span><span class="nx">canvas</span><span class="p">.</span><span class="nx">offsetHeight</span><span class="p">;</span>
+      <span class="p">}</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">gl</span><span class="p">.</span><span class="nx">canvas</span><span class="p">.</span><span class="nx">width</span> <span class="o">=</span> <span class="nx">x</span><span class="p">;</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">gl</span><span class="p">.</span><span class="nx">canvas</span><span class="p">.</span><span class="nx">height</span> <span class="o">=</span> <span class="nx">y</span><span class="p">;</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">gl</span><span class="p">.</span><span class="nx">viewport</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">x</span><span class="p">,</span> <span class="nx">y</span><span class="p">);</span>
+      <span class="k">return</span> <span class="k">this</span><span class="p">;</span>
+    <span class="p">},</span></pre></div>             </td>           </tr>                               <tr id="section-5">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-5">&#182;</a>               </div>               <h2>Per Fragment Operations</h2>             </td>             <td class="code">               <div class="highlight"><pre></pre></div>             </td>           </tr>                               <tr id="section-6">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-6">&#182;</a>               </div>               <h3>blendColor</h3>
+
+<p>Accepts colors in RGBA format</p>
+
+<p><code>blendColor(r, g, b, a)</code></p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="nx">blendColor</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">r</span><span class="p">,</span> <span class="nx">g</span><span class="p">,</span> <span class="nx">b</span><span class="p">,</span> <span class="nx">a</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">gl</span><span class="p">.</span><span class="nx">blendColor</span><span class="p">(</span><span class="nx">r</span><span class="p">,</span> <span class="nx">g</span><span class="p">,</span> <span class="nx">b</span><span class="p">,</span> <span class="nx">a</span><span class="p">);</span>
+    <span class="p">},</span></pre></div>             </td>           </tr>                               <tr id="section-7">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-7">&#182;</a>               </div>               <h3>blendEquation</h3>
+
+<p>An equation to use to blend the colors.  It accepts one of the modes
+listed below.</p>
+
+<p><code>blendEquation([modeRGB], [modeAlpha])</code></p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="nx">blendEquation</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+			<span class="k">this</span><span class="p">.</span><span class="nx">gl</span><span class="p">.</span><span class="nx">blendEquation</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">gl</span><span class="p">,</span> <span class="nx">arguments</span><span class="p">);</span>
+			<span class="k">return</span> <span class="k">this</span><span class="p">;</span>
+		<span class="p">},</span></pre></div>             </td>           </tr>                               <tr id="section-8">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-8">&#182;</a>               </div>               <h3>blendFunc</h3>
+
+<p>?</p>
+
+<p>``</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="nx">blendFunc</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+			<span class="k">this</span><span class="p">.</span><span class="nx">gl</span><span class="p">.</span><span class="nx">blendFunc</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">gl</span><span class="p">,</span> <span class="nx">arguments</span><span class="p">);</span>
+			<span class="k">return</span> <span class="k">this</span><span class="p">;</span>
+		<span class="p">},</span></pre></div>             </td>           </tr>                               <tr id="section-9">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-9">&#182;</a>               </div>               <h3>blendFuncSeparate</h3>
+
+<p>?</p>
+
+<p>``</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="nx">blendFuncSeparate</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+			<span class="k">this</span><span class="p">.</span><span class="nx">gl</span><span class="p">.</span><span class="nx">blendFuncSeparate</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">gl</span><span class="p">,</span> <span class="nx">arguments</span><span class="p">);</span>
+			<span class="k">return</span> <span class="k">this</span><span class="p">;</span>
+		<span class="p">},</span></pre></div>             </td>           </tr>                               <tr id="section-10">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-10">&#182;</a>               </div>               <h3>depthFunc</h3>
+
+<p>?</p>
+
+<p>``</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="nx">depthFunc</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+			<span class="k">this</span><span class="p">.</span><span class="nx">gl</span><span class="p">.</span><span class="nx">depthFunc</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">gl</span><span class="p">,</span> <span class="nx">arguments</span><span class="p">);</span>
+			<span class="k">return</span> <span class="k">this</span><span class="p">;</span>
+		<span class="p">},</span></pre></div>             </td>           </tr>                               <tr id="section-11">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-11">&#182;</a>               </div>               <h3>sampleCoverage</h3>
+
+<p>?</p>
+
+<p>``</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="nx">sampleCoverage</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+			<span class="k">this</span><span class="p">.</span><span class="nx">gl</span><span class="p">.</span><span class="nx">sampleCoverage</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">gl</span><span class="p">,</span> <span class="nx">arguments</span><span class="p">);</span>
+			<span class="k">return</span> <span class="k">this</span><span class="p">;</span>
+		<span class="p">},</span></pre></div>             </td>           </tr>                               <tr id="section-12">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-12">&#182;</a>               </div>               <h3>stencilFunc</h3>
+
+<p>?</p>
+
+<p>``</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="nx">stencilFunc</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+			<span class="k">this</span><span class="p">.</span><span class="nx">gl</span><span class="p">.</span><span class="nx">stencilFunc</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">gl</span><span class="p">,</span> <span class="nx">arguments</span><span class="p">);</span>
+			<span class="k">return</span> <span class="k">this</span><span class="p">;</span>
+		<span class="p">},</span></pre></div>             </td>           </tr>                               <tr id="section-13">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-13">&#182;</a>               </div>               <h3>stencileFuncSeparate</h3>
+
+<p>?</p>
+
+<p>``</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="nx">stencileFuncSeparate</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+			<span class="k">this</span><span class="p">.</span><span class="nx">gl</span><span class="p">.</span><span class="nx">stencileFuncSeparate</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">gl</span><span class="p">,</span> <span class="nx">arguments</span><span class="p">);</span>
+			<span class="k">return</span> <span class="k">this</span><span class="p">;</span>
+		<span class="p">},</span></pre></div>             </td>           </tr>                               <tr id="section-14">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-14">&#182;</a>               </div>               <h3>stencilOp</h3>
+
+<p>?</p>
+
+<p>``</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="nx">stencilOp</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+			<span class="k">this</span><span class="p">.</span><span class="nx">gl</span><span class="p">.</span><span class="nx">stencilOp</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">gl</span><span class="p">,</span> <span class="nx">arguments</span><span class="p">);</span>
+			<span class="k">return</span> <span class="k">this</span><span class="p">;</span>
+		<span class="p">},</span></pre></div>             </td>           </tr>                               <tr id="section-15">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-15">&#182;</a>               </div>               <h3>stentileOpSeparate</h3>
+
+<p>?</p>
+
+<p>``</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="nx">stentileOpSeparate</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+			<span class="k">this</span><span class="p">.</span><span class="nx">gl</span><span class="p">.</span><span class="nx">stentileOpSeparate</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">gl</span><span class="p">,</span> <span class="nx">arguments</span><span class="p">);</span>
+			<span class="k">return</span> <span class="k">this</span><span class="p">;</span>
+		<span class="p">},</span></pre></div>             </td>           </tr>                               <tr id="section-16">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-16">&#182;</a>               </div>               <h2>Whole Framebuffer Operations</h2>             </td>             <td class="code">               <div class="highlight"><pre></pre></div>             </td>           </tr>                               <tr id="section-17">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-17">&#182;</a>               </div>               <h3>clear</h3>
+
+<p>Specifies a mask to clear from the current framebuffer</p>
+
+<p>``</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="nx">clear</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+			<span class="k">this</span><span class="p">.</span><span class="nx">gl</span><span class="p">.</span><span class="nx">clear</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">gl</span><span class="p">,</span> <span class="nx">arguments</span><span class="p">);</span>
+			<span class="k">return</span> <span class="k">this</span><span class="p">;</span>
+		<span class="p">},</span></pre></div>             </td>           </tr>                               <tr id="section-18">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-18">&#182;</a>               </div>               <h3>clearColor</h3>
+
+<p>Defines the color used to clear a section of the framebuffer.</p>
+
+<p>``</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="nx">clearColor</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+			<span class="k">this</span><span class="p">.</span><span class="nx">gl</span><span class="p">.</span><span class="nx">clearColor</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">gl</span><span class="p">,</span> <span class="nx">arguments</span><span class="p">);</span>
+			<span class="k">return</span> <span class="k">this</span><span class="p">;</span>
+		<span class="p">},</span></pre></div>             </td>           </tr>                               <tr id="section-19">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-19">&#182;</a>               </div>               <h3>clearDepth</h3>
+
+<p>Defines the depth to traverse to when clearing</p>
+
+<p>``</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="nx">clearDepth</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+			<span class="k">this</span><span class="p">.</span><span class="nx">gl</span><span class="p">.</span><span class="nx">clearDepth</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">gl</span><span class="p">,</span> <span class="nx">arguments</span><span class="p">);</span>
+			<span class="k">return</span> <span class="k">this</span><span class="p">;</span>
+		<span class="p">},</span></pre></div>             </td>           </tr>                               <tr id="section-20">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-20">&#182;</a>               </div>               <h3>clearStencil</h3>
+
+<p>?</p>
+
+<p>``</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="nx">clearStencil</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+			<span class="k">this</span><span class="p">.</span><span class="nx">gl</span><span class="p">.</span><span class="nx">clearStencil</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">gl</span><span class="p">,</span> <span class="nx">arguments</span><span class="p">);</span>
+			<span class="k">return</span> <span class="k">this</span><span class="p">;</span>
+		<span class="p">},</span></pre></div>             </td>           </tr>                               <tr id="section-21">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-21">&#182;</a>               </div>               <h3>colorMask</h3>
+
+<p>?</p>
+
+<p>``</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="nx">colorMask</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+			<span class="k">this</span><span class="p">.</span><span class="nx">gl</span><span class="p">.</span><span class="nx">colorMask</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">gl</span><span class="p">,</span> <span class="nx">arguments</span><span class="p">);</span>
+			<span class="k">return</span> <span class="k">this</span><span class="p">;</span>
+		<span class="p">},</span></pre></div>             </td>           </tr>                               <tr id="section-22">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-22">&#182;</a>               </div>               <h3>depthMask</h3>
+
+<p>?</p>
+
+<p>``</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="nx">depthMask</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+			<span class="k">this</span><span class="p">.</span><span class="nx">gl</span><span class="p">.</span><span class="nx">depthMask</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">gl</span><span class="p">,</span> <span class="nx">arguments</span><span class="p">);</span>
+			<span class="k">return</span> <span class="k">this</span><span class="p">;</span>
+		<span class="p">},</span></pre></div>             </td>           </tr>                               <tr id="section-23">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-23">&#182;</a>               </div>               <h3>stencilMask</h3>
+
+<p>?</p>
+
+<p>``</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="nx">stencilMask</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+			<span class="k">this</span><span class="p">.</span><span class="nx">gl</span><span class="p">.</span><span class="nx">stencilMask</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">gl</span><span class="p">,</span> <span class="nx">arguments</span><span class="p">);</span>
+			<span class="k">return</span> <span class="k">this</span><span class="p">;</span>
+		<span class="p">},</span></pre></div>             </td>           </tr>                               <tr id="section-24">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-24">&#182;</a>               </div>               <h3>stencilMaskSeparate</h3>
+
+<p>?</p>
+
+<p>``</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="nx">stencilMaskSeparate</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+			<span class="k">this</span><span class="p">.</span><span class="nx">gl</span><span class="p">.</span><span class="nx">stencilMaskSeparate</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">gl</span><span class="p">,</span> <span class="nx">arguments</span><span class="p">);</span>
+			<span class="k">return</span> <span class="k">this</span><span class="p">;</span>
+		<span class="p">},</span></pre></div>             </td>           </tr>                               <tr id="section-25">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-25">&#182;</a>               </div>               <h2>Buffer Objects</h2>             </td>             <td class="code">               <div class="highlight"><pre></pre></div>             </td>           </tr>                               <tr id="section-26">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-26">&#182;</a>               </div>               <h3>bindBuffer</h3>
+
+<p>?</p>
+
+<p>``</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="nx">bindBuffer</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+			<span class="k">this</span><span class="p">.</span><span class="nx">gl</span><span class="p">.</span><span class="nx">bindBuffer</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">gl</span><span class="p">,</span> <span class="nx">arguments</span><span class="p">);</span>
+			<span class="k">return</span> <span class="k">this</span><span class="p">;</span>
+		<span class="p">},</span></pre></div>             </td>           </tr>                               <tr id="section-27">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-27">&#182;</a>               </div>               <h3>bufferData</h3>
+
+<p>?</p>
+
+<p>``</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="nx">bufferData</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+			<span class="k">this</span><span class="p">.</span><span class="nx">gl</span><span class="p">.</span><span class="nx">bufferData</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">gl</span><span class="p">,</span> <span class="nx">arguments</span><span class="p">);</span>
+			<span class="k">return</span> <span class="k">this</span><span class="p">;</span>
+		<span class="p">},</span></pre></div>             </td>           </tr>                               <tr id="section-28">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-28">&#182;</a>               </div>               <h3>bufferSubData</h3>
+
+<p>?</p>
+
+<p>``</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="nx">bufferSubData</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+			<span class="k">this</span><span class="p">.</span><span class="nx">gl</span><span class="p">.</span><span class="nx">bufferSubData</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">gl</span><span class="p">,</span> <span class="nx">arguments</span><span class="p">);</span>
+			<span class="k">return</span> <span class="k">this</span><span class="p">;</span>
+		<span class="p">},</span></pre></div>             </td>           </tr>                               <tr id="section-29">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-29">&#182;</a>               </div>               <h3>createBuffer</h3>
+
+<p>?</p>
+
+<p>``</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="nx">createBuffer</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+			<span class="k">this</span><span class="p">.</span><span class="nx">gl</span><span class="p">.</span><span class="nx">createBuffer</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">gl</span><span class="p">,</span> <span class="nx">arguments</span><span class="p">);</span>
+			<span class="k">return</span> <span class="k">this</span><span class="p">;</span>
+		<span class="p">},</span></pre></div>             </td>           </tr>                               <tr id="section-30">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-30">&#182;</a>               </div>               <h3>deleteBuffer</h3>
+
+<p>?</p>
+
+<p>``</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="nx">deleteBuffer</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+			<span class="k">this</span><span class="p">.</span><span class="nx">gl</span><span class="p">.</span><span class="nx">deleteBuffer</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">gl</span><span class="p">,</span> <span class="nx">arguments</span><span class="p">);</span>
+			<span class="k">return</span> <span class="k">this</span><span class="p">;</span>
+		<span class="p">},</span></pre></div>             </td>           </tr>                               <tr id="section-31">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-31">&#182;</a>               </div>               <h3>getBufferParameter</h3>
+
+<p>?</p>
+
+<p>``</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="nx">getBufferParameter</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+			<span class="k">this</span><span class="p">.</span><span class="nx">gl</span><span class="p">.</span><span class="nx">getBufferParameter</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">gl</span><span class="p">,</span> <span class="nx">arguments</span><span class="p">);</span>
+			<span class="k">return</span> <span class="k">this</span><span class="p">;</span>
+		<span class="p">},</span></pre></div>             </td>           </tr>                               <tr id="section-32">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-32">&#182;</a>               </div>               <h3>isBuffer</h3>
+
+<p>?</p>
+
+<p>``</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="nx">isBuffer</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+			<span class="k">this</span><span class="p">.</span><span class="nx">gl</span><span class="p">.</span><span class="nx">isBuffer</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">gl</span><span class="p">,</span> <span class="nx">arguments</span><span class="p">);</span>
+			<span class="k">return</span> <span class="k">this</span><span class="p">;</span>
+		<span class="p">},</span></pre></div>             </td>           </tr>                               <tr id="section-33">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-33">&#182;</a>               </div>               <h2>View and Clipping</h2>             </td>             <td class="code">               <div class="highlight"><pre></pre></div>             </td>           </tr>                               <tr id="section-34">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-34">&#182;</a>               </div>               <h3>depthRange</h3>
+
+<p>?</p>
+
+<p>``</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="nx">depthRange</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+			<span class="k">this</span><span class="p">.</span><span class="nx">gl</span><span class="p">.</span><span class="nx">depthRange</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">gl</span><span class="p">,</span> <span class="nx">arguments</span><span class="p">);</span>
+			<span class="k">return</span> <span class="k">this</span><span class="p">;</span>
+		<span class="p">},</span></pre></div>             </td>           </tr>                               <tr id="section-35">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-35">&#182;</a>               </div>               <h3>scissor</h3>
+
+<p>The scissor test for our framebuffer</p>
+
+<p>``</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="nx">scissor</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+			<span class="k">this</span><span class="p">.</span><span class="nx">gl</span><span class="p">.</span><span class="nx">scissor</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">gl</span><span class="p">,</span> <span class="nx">arguments</span><span class="p">);</span>
+			<span class="k">return</span> <span class="k">this</span><span class="p">;</span>
+		<span class="p">},</span></pre></div>             </td>           </tr>                               <tr id="section-36">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-36">&#182;</a>               </div>               <h3>viewport</h3>
+
+<p>?</p>
+
+<p>``</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="nx">viewport</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+			<span class="k">this</span><span class="p">.</span><span class="nx">gl</span><span class="p">.</span><span class="nx">viewport</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">gl</span><span class="p">,</span> <span class="nx">arguments</span><span class="p">);</span>
+			<span class="k">return</span> <span class="k">this</span><span class="p">;</span>
+		<span class="p">},</span></pre></div>             </td>           </tr>                               <tr id="section-37">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-37">&#182;</a>               </div>               <h2>Rasterization</h2>             </td>             <td class="code">               <div class="highlight"><pre></pre></div>             </td>           </tr>                               <tr id="section-38">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-38">&#182;</a>               </div>               <h3>cullFace</h3>
+
+<p>?</p>
+
+<p>``</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="nx">cullFace</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+			<span class="k">this</span><span class="p">.</span><span class="nx">gl</span><span class="p">.</span><span class="nx">cullFace</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">gl</span><span class="p">,</span> <span class="nx">arguments</span><span class="p">);</span>
+			<span class="k">return</span> <span class="k">this</span><span class="p">;</span>
+		<span class="p">},</span></pre></div>             </td>           </tr>                               <tr id="section-39">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-39">&#182;</a>               </div>               <h3>frontFace</h3>
+
+<p>?</p>
+
+<p>``</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="nx">frontFace</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+			<span class="k">this</span><span class="p">.</span><span class="nx">gl</span><span class="p">.</span><span class="nx">frontFace</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">gl</span><span class="p">,</span> <span class="nx">arguments</span><span class="p">);</span>
+			<span class="k">return</span> <span class="k">this</span><span class="p">;</span>
+		<span class="p">},</span></pre></div>             </td>           </tr>                               <tr id="section-40">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-40">&#182;</a>               </div>               <h3>lineWidth</h3>
+
+<p>?</p>
+
+<p>``</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="nx">lineWidth</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+			<span class="k">this</span><span class="p">.</span><span class="nx">gl</span><span class="p">.</span><span class="nx">lineWidth</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">gl</span><span class="p">,</span> <span class="nx">arguments</span><span class="p">);</span>
+			<span class="k">return</span> <span class="k">this</span><span class="p">;</span>
+		<span class="p">},</span></pre></div>             </td>           </tr>                               <tr id="section-41">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-41">&#182;</a>               </div>               <h3>polygonOffest</h3>
+
+<p>?</p>
+
+<p>``</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="nx">polygonOffest</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+			<span class="k">this</span><span class="p">.</span><span class="nx">gl</span><span class="p">.</span><span class="nx">polygonOffest</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">gl</span><span class="p">,</span> <span class="nx">arguments</span><span class="p">);</span>
+			<span class="k">return</span> <span class="k">this</span><span class="p">;</span>
+		<span class="p">},</span></pre></div>             </td>           </tr>                               <tr id="section-42">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-42">&#182;</a>               </div>               <h2>Programs and Shaders</h2>             </td>             <td class="code">               <div class="highlight"><pre></pre></div>             </td>           </tr>                               <tr id="section-43">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-43">&#182;</a>               </div>               <h3>attachShader</h3>
+
+<p>?</p>
+
+<p>``</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="nx">attachShader</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+			<span class="k">this</span><span class="p">.</span><span class="nx">gl</span><span class="p">.</span><span class="nx">attachShader</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">gl</span><span class="p">,</span> <span class="nx">arguments</span><span class="p">);</span>
+			<span class="k">return</span> <span class="k">this</span><span class="p">;</span>
+		<span class="p">},</span></pre></div>             </td>           </tr>                               <tr id="section-44">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-44">&#182;</a>               </div>               <h3>bindAttribLocation</h3>
+
+<p>?</p>
+
+<p>``</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="nx">bindAttribLocation</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+			<span class="k">this</span><span class="p">.</span><span class="nx">gl</span><span class="p">.</span><span class="nx">bindAttribLocation</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">gl</span><span class="p">,</span> <span class="nx">arguments</span><span class="p">);</span>
+			<span class="k">return</span> <span class="k">this</span><span class="p">;</span>
+		<span class="p">},</span></pre></div>             </td>           </tr>                               <tr id="section-45">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-45">&#182;</a>               </div>               <h3>compileShader</h3>
+
+<p>?</p>
+
+<p>``</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="nx">compileShader</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+			<span class="k">this</span><span class="p">.</span><span class="nx">gl</span><span class="p">.</span><span class="nx">compileShader</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">gl</span><span class="p">,</span> <span class="nx">arguments</span><span class="p">);</span>
+			<span class="k">return</span> <span class="k">this</span><span class="p">;</span>
+		<span class="p">},</span></pre></div>             </td>           </tr>                               <tr id="section-46">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-46">&#182;</a>               </div>               <h3>createProgram</h3>
+
+<p>?</p>
+
+<p>``</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="nx">createProgram</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+			<span class="k">this</span><span class="p">.</span><span class="nx">gl</span><span class="p">.</span><span class="nx">createProgram</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">gl</span><span class="p">,</span> <span class="nx">arguments</span><span class="p">);</span>
+			<span class="k">return</span> <span class="k">this</span><span class="p">;</span>
+		<span class="p">},</span></pre></div>             </td>           </tr>                               <tr id="section-47">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-47">&#182;</a>               </div>               <h3>createShader</h3>
+
+<p>Description of the function</p>
+
+<p>``</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="nx">createShader</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+			<span class="k">this</span><span class="p">.</span><span class="nx">gl</span><span class="p">.</span><span class="nx">createShader</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">gl</span><span class="p">,</span> <span class="nx">arguments</span><span class="p">);</span>
+			<span class="k">return</span> <span class="k">this</span><span class="p">;</span>
+		<span class="p">},</span></pre></div>             </td>           </tr>                               <tr id="section-48">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-48">&#182;</a>               </div>               <h3>deleteProgram</h3>
+
+<p>?</p>
+
+<p>``</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="nx">deleteProgram</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+			<span class="k">this</span><span class="p">.</span><span class="nx">gl</span><span class="p">.</span><span class="nx">deleteProgram</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">gl</span><span class="p">,</span> <span class="nx">arguments</span><span class="p">);</span>
+			<span class="k">return</span> <span class="k">this</span><span class="p">;</span>
+		<span class="p">},</span></pre></div>             </td>           </tr>                               <tr id="section-49">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-49">&#182;</a>               </div>               <h3>deleteShader</h3>
+
+<p>?</p>
+
+<p>``</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="nx">deleteShader</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+			<span class="k">this</span><span class="p">.</span><span class="nx">gl</span><span class="p">.</span><span class="nx">deleteShader</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">gl</span><span class="p">,</span> <span class="nx">arguments</span><span class="p">);</span>
+			<span class="k">return</span> <span class="k">this</span><span class="p">;</span>
+		<span class="p">},</span></pre></div>             </td>           </tr>                               <tr id="section-50">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-50">&#182;</a>               </div>               <h3>detachShader</h3>
+
+<p>?</p>
+
+<p>``</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="nx">detachShader</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+			<span class="k">this</span><span class="p">.</span><span class="nx">gl</span><span class="p">.</span><span class="nx">detachShader</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">gl</span><span class="p">,</span> <span class="nx">arguments</span><span class="p">);</span>
+			<span class="k">return</span> <span class="k">this</span><span class="p">;</span>
+		<span class="p">},</span></pre></div>             </td>           </tr>                               <tr id="section-51">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-51">&#182;</a>               </div>               <h3>getAttachedShaders</h3>
+
+<p>?</p>
+
+<p>``</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="nx">getAttachedShaders</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+			<span class="k">this</span><span class="p">.</span><span class="nx">gl</span><span class="p">.</span><span class="nx">getAttachedShaders</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">gl</span><span class="p">,</span> <span class="nx">arguments</span><span class="p">);</span>
+			<span class="k">return</span> <span class="k">this</span><span class="p">;</span>
+		<span class="p">},</span></pre></div>             </td>           </tr>                               <tr id="section-52">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-52">&#182;</a>               </div>               <h3>getProgramParameter</h3>
+
+<p>?</p>
+
+<p>``</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="nx">getProgramParameter</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+			<span class="k">this</span><span class="p">.</span><span class="nx">gl</span><span class="p">.</span><span class="nx">getProgramParameter</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">gl</span><span class="p">,</span> <span class="nx">arguments</span><span class="p">);</span>
+			<span class="k">return</span> <span class="k">this</span><span class="p">;</span>
+		<span class="p">},</span></pre></div>             </td>           </tr>                               <tr id="section-53">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-53">&#182;</a>               </div>               <h3>getProgramInfoLog</h3>
+
+<p>?</p>
+
+<p>``</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="nx">getProgramInfoLog</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+			<span class="k">this</span><span class="p">.</span><span class="nx">gl</span><span class="p">.</span><span class="nx">getProgramInfoLog</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">gl</span><span class="p">,</span> <span class="nx">arguments</span><span class="p">);</span>
+			<span class="k">return</span> <span class="k">this</span><span class="p">;</span>
+		<span class="p">},</span></pre></div>             </td>           </tr>                               <tr id="section-54">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-54">&#182;</a>               </div>               <h3>getShaderParameter</h3>
+
+<p>?</p>
+
+<p>``</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="nx">getShaderParameter</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+			<span class="k">this</span><span class="p">.</span><span class="nx">gl</span><span class="p">.</span><span class="nx">getShaderParameter</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">gl</span><span class="p">,</span> <span class="nx">arguments</span><span class="p">);</span>
+			<span class="k">return</span> <span class="k">this</span><span class="p">;</span>
+		<span class="p">},</span></pre></div>             </td>           </tr>                               <tr id="section-55">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-55">&#182;</a>               </div>               <h3>getShaderInfoLog</h3>
+
+<p>?</p>
+
+<p>``</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="nx">getShaderInfoLog</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+			<span class="k">this</span><span class="p">.</span><span class="nx">gl</span><span class="p">.</span><span class="nx">getShaderInfoLog</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">gl</span><span class="p">,</span> <span class="nx">arguments</span><span class="p">);</span>
+			<span class="k">return</span> <span class="k">this</span><span class="p">;</span>
+		<span class="p">},</span></pre></div>             </td>           </tr>                               <tr id="section-56">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-56">&#182;</a>               </div>               <h3>getShaderSource</h3>
+
+<p>?</p>
+
+<p>``</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="nx">getShaderSource</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+			<span class="k">this</span><span class="p">.</span><span class="nx">gl</span><span class="p">.</span><span class="nx">getShaderSource</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">gl</span><span class="p">,</span> <span class="nx">arguments</span><span class="p">);</span>
+			<span class="k">return</span> <span class="k">this</span><span class="p">;</span>
+		<span class="p">},</span></pre></div>             </td>           </tr>                               <tr id="section-57">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-57">&#182;</a>               </div>               <h3>isProgram</h3>
+
+<p>?</p>
+
+<p>``</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="nx">isProgram</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+			<span class="k">this</span><span class="p">.</span><span class="nx">gl</span><span class="p">.</span><span class="nx">isProgram</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">gl</span><span class="p">,</span> <span class="nx">arguments</span><span class="p">);</span>
+			<span class="k">return</span> <span class="k">this</span><span class="p">;</span>
+		<span class="p">},</span></pre></div>             </td>           </tr>                               <tr id="section-58">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-58">&#182;</a>               </div>               <h3>isShader</h3>
+
+<p>?</p>
+
+<p>``</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="nx">isShader</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+			<span class="k">this</span><span class="p">.</span><span class="nx">gl</span><span class="p">.</span><span class="nx">isShader</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">gl</span><span class="p">,</span> <span class="nx">arguments</span><span class="p">);</span>
+			<span class="k">return</span> <span class="k">this</span><span class="p">;</span>
+		<span class="p">},</span></pre></div>             </td>           </tr>                               <tr id="section-59">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-59">&#182;</a>               </div>               <h3>linkProgram</h3>
+
+<p>?</p>
+
+<p>``</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="nx">linkProgram</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+			<span class="k">this</span><span class="p">.</span><span class="nx">gl</span><span class="p">.</span><span class="nx">linkProgram</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">gl</span><span class="p">,</span> <span class="nx">arguments</span><span class="p">);</span>
+			<span class="k">return</span> <span class="k">this</span><span class="p">;</span>
+		<span class="p">},</span></pre></div>             </td>           </tr>                               <tr id="section-60">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-60">&#182;</a>               </div>               <h3>shaderSource</h3>
+
+<p>?</p>
+
+<p>``</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="nx">shaderSource</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+			<span class="k">this</span><span class="p">.</span><span class="nx">gl</span><span class="p">.</span><span class="nx">shaderSource</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">gl</span><span class="p">,</span> <span class="nx">arguments</span><span class="p">);</span>
+			<span class="k">return</span> <span class="k">this</span><span class="p">;</span>
+		<span class="p">},</span></pre></div>             </td>           </tr>                               <tr id="section-61">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-61">&#182;</a>               </div>               <h3>useProgram</h3>
+
+<p>?</p>
+
+<p>``</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="nx">useProgram</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+			<span class="k">this</span><span class="p">.</span><span class="nx">gl</span><span class="p">.</span><span class="nx">useProgram</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">gl</span><span class="p">,</span> <span class="nx">arguments</span><span class="p">);</span>
+			<span class="k">return</span> <span class="k">this</span><span class="p">;</span>
+		<span class="p">},</span></pre></div>             </td>           </tr>                               <tr id="section-62">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-62">&#182;</a>               </div>               <h3>validateProgram</h3>
+
+<p>?</p>
+
+<p>``</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="nx">validateProgram</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+			<span class="k">this</span><span class="p">.</span><span class="nx">gl</span><span class="p">.</span><span class="nx">validateProgram</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">gl</span><span class="p">,</span> <span class="nx">arguments</span><span class="p">);</span>
+			<span class="k">return</span> <span class="k">this</span><span class="p">;</span>
+		<span class="p">},</span></pre></div>             </td>           </tr>                               <tr id="section-63">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-63">&#182;</a>               </div>               <h2>Uniforms and Attributes</h2>             </td>             <td class="code">               <div class="highlight"><pre></pre></div>             </td>           </tr>                               <tr id="section-64">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-64">&#182;</a>               </div>               <h3>disableVertexAttribArray</h3>
+
+<p>?</p>
+
+<p>``</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="nx">disableVertexAttribArray</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+			<span class="k">this</span><span class="p">.</span><span class="nx">gl</span><span class="p">.</span><span class="nx">disableVertexAttribArray</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">gl</span><span class="p">,</span> <span class="nx">arguments</span><span class="p">);</span>
+			<span class="k">return</span> <span class="k">this</span><span class="p">;</span>
+		<span class="p">},</span></pre></div>             </td>           </tr>                               <tr id="section-65">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-65">&#182;</a>               </div>               <h3>enableVertexAttribArray</h3>
+
+<p>?</p>
+
+<p>``</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="nx">enableVertexAttribArray</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+			<span class="k">this</span><span class="p">.</span><span class="nx">gl</span><span class="p">.</span><span class="nx">enableVertexAttribArray</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">gl</span><span class="p">,</span> <span class="nx">arguments</span><span class="p">);</span>
+			<span class="k">return</span> <span class="k">this</span><span class="p">;</span>
+		<span class="p">},</span></pre></div>             </td>           </tr>                               <tr id="section-66">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-66">&#182;</a>               </div>               <h3>getActiveAttrib</h3>
+
+<p>?</p>
+
+<p>``</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="nx">getActiveAttrib</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+			<span class="k">this</span><span class="p">.</span><span class="nx">gl</span><span class="p">.</span><span class="nx">getActiveAttrib</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">gl</span><span class="p">,</span> <span class="nx">arguments</span><span class="p">);</span>
+			<span class="k">return</span> <span class="k">this</span><span class="p">;</span>
+		<span class="p">},</span></pre></div>             </td>           </tr>                               <tr id="section-67">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-67">&#182;</a>               </div>               <h3>getActiveUniform</h3>
+
+<p>?</p>
+
+<p>``</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="nx">getActiveUniform</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+			<span class="k">this</span><span class="p">.</span><span class="nx">gl</span><span class="p">.</span><span class="nx">getActiveUniform</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">gl</span><span class="p">,</span> <span class="nx">arguments</span><span class="p">);</span>
+			<span class="k">return</span> <span class="k">this</span><span class="p">;</span>
+		<span class="p">},</span></pre></div>             </td>           </tr>                               <tr id="section-68">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-68">&#182;</a>               </div>               <h3>getAttribLocation</h3>
+
+<p>?</p>
+
+<p>``</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="nx">getAttribLocation</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+			<span class="k">this</span><span class="p">.</span><span class="nx">gl</span><span class="p">.</span><span class="nx">getAttribLocation</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">gl</span><span class="p">,</span> <span class="nx">arguments</span><span class="p">);</span>
+			<span class="k">return</span> <span class="k">this</span><span class="p">;</span>
+		<span class="p">},</span></pre></div>             </td>           </tr>                               <tr id="section-69">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-69">&#182;</a>               </div>               <h3>getUniform</h3>
+
+<p>?</p>
+
+<p>``</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="nx">getUniform</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+			<span class="k">this</span><span class="p">.</span><span class="nx">gl</span><span class="p">.</span><span class="nx">getUniform</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">gl</span><span class="p">,</span> <span class="nx">arguments</span><span class="p">);</span>
+			<span class="k">return</span> <span class="k">this</span><span class="p">;</span>
+		<span class="p">},</span></pre></div>             </td>           </tr>                               <tr id="section-70">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-70">&#182;</a>               </div>               <h3>getUniformLocation</h3>
+
+<p>?</p>
+
+<p>``</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="nx">getUniformLocation</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+			<span class="k">this</span><span class="p">.</span><span class="nx">gl</span><span class="p">.</span><span class="nx">getUniformLocation</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">gl</span><span class="p">,</span> <span class="nx">arguments</span><span class="p">);</span>
+			<span class="k">return</span> <span class="k">this</span><span class="p">;</span>
+		<span class="p">},</span></pre></div>             </td>           </tr>                               <tr id="section-71">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-71">&#182;</a>               </div>               <h3>getVertexAttrib</h3>
+
+<p>?</p>
+
+<p>``</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="nx">getVertexAttrib</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+			<span class="k">this</span><span class="p">.</span><span class="nx">gl</span><span class="p">.</span><span class="nx">getVertexAttrib</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">gl</span><span class="p">,</span> <span class="nx">arguments</span><span class="p">);</span>
+			<span class="k">return</span> <span class="k">this</span><span class="p">;</span>
+		<span class="p">},</span></pre></div>             </td>           </tr>                               <tr id="section-72">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-72">&#182;</a>               </div>               <h3>getVertexAttribOffset</h3>
+
+<p>?</p>
+
+<p>``</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="nx">getVertexAttribOffset</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+			<span class="k">this</span><span class="p">.</span><span class="nx">gl</span><span class="p">.</span><span class="nx">getVertexAttribOffset</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">gl</span><span class="p">,</span> <span class="nx">arguments</span><span class="p">);</span>
+			<span class="k">return</span> <span class="k">this</span><span class="p">;</span>
+		<span class="p">},</span></pre></div>             </td>           </tr>                               <tr id="section-73">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-73">&#182;</a>               </div>               <h3>vertexAttribPointer</h3>
+
+<p>?</p>
+
+<p>``</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="nx">vertexAttribPointer</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">gl</span><span class="p">.</span><span class="nx">vertexAttribPointer</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">gl</span><span class="p">,</span> <span class="nx">arguments</span><span class="p">);</span>
+      <span class="k">return</span> <span class="k">this</span><span class="p">;</span>
+    <span class="p">},</span></pre></div>             </td>           </tr>                               <tr id="section-74">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-74">&#182;</a>               </div>               <h2>Texture Objects</h2>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="p">};</span>
+
+
+
+  <span class="k">return</span> <span class="nx">slogo</span><span class="p">();</span>
+<span class="p">}());</span>
+
+</pre></div>             </td>           </tr>                </tbody>     </table>   </div> </body> </html> 
