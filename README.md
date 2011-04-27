@@ -60,17 +60,30 @@ We have four bitwise operators in Slogo.
 
 #### And operator
 
-`true and false == false`
+    true and true   # true
+    true and false  # false
+    false and false # false
+    false and true  # false
 
 #### Or operator
 
-`true or false == true`
+    true or true   # true
+    true or false  # true
+    false or false # false
+    false or true  # true
 
 #### Xor operator (exclusive or)
-`true xor false == true`
+    true xor true   # false
+    true xor false  # true
+    false xor false # false
+    false xor true  # true
 
 #### Not operator
-`true not false == true `
+    true not true   # true
+    true not false  # false
+    false not false # false
+    false not true  # true
+ 
  
  
  
