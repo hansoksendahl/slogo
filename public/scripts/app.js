@@ -44,6 +44,9 @@ var App = (function() {
       }
     };
 
+    // We make use of the jQuery UI position function quite a bit in this
+    // interface.  The following are the elements that are dynamically
+    // positioned (organized by id).
     this.positions = {
       '#speed': {
         'my': 'left center',
