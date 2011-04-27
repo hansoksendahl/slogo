@@ -20,7 +20,7 @@ Slogo sits on top of a stack that looks like this.
         Slogo - Our Grammar
 
 ### Math constants and functions
-The [Mozilla Developer Center documentation](https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Math)
+The [Mozilla Developer Network documentation](https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Math)
 for Javascript's Math object is worth looking up because we retain many of
 Javascript's math constants and functions.
 
@@ -85,6 +85,7 @@ feel free to skip to the next section._
     true not false  # false
     false not false # false
     false not true  # true
+ 
  
  
  
