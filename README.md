@@ -16,8 +16,8 @@ simulations.
 Slogo sits on top of a stack that looks like this.
 
 * [Node.js](http://nodejs.org/) - Build Platform
-  * [Jison](http://zaach.github.com/jison/) - Parser Gernerator
-    * [Slogo](https://github.com/hansineffect/Slogo) - Our Grammar
+   * [Jison](http://zaach.github.com/jison/) - Parser Gernerator
+      * [Slogo](https://github.com/hansineffect/Slogo) - Our Grammar
 
 ### Math constants and functions
 The [Mozilla Developer Network documentation](https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Math)
@@ -83,6 +83,7 @@ feel free to skip to the next section._
     true not false  # returns false
     false not false # returns false
     false not true  # returns true
+ 
  
  
  
