@@ -66,11 +66,12 @@ We have four bitwise operators in Slogo.
 
 `true or false == true`
 
-#### Xor operator
+#### Xor operator (exclusive or)
 `true xor false == true`
 
 #### Not operator
 `true not false == true `
+ 
  
  
  
