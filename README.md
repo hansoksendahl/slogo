@@ -32,26 +32,26 @@ and develop code secondarily.
 1. In Slogo every math constant and function is directly available in
   the main namespace.
 
-    `PI == 3.141592653589793`
+    `PI # returns 3.141592653589793`
 
-    `max 2, 5, 3 == 5`
+    `max 2, 5, 3 # returns 5`
 
 2. Exponents have their own operator, the `^` operator
 
-    `3 ^ 2 == 9`
+    `3 ^ 2 # returns 9`
 
 3. Factorials have their own operator, the `!` operator
 
-    `4! == 4 * 3 * 2 * 1`
+    `4! # returns 4 * 3 * 2 * 1`
 
 4. The percent sign is used for percentages.
 
-    `50% == 0.50`
+    `50% # returns 0.50`
 
 5. The [`modulus`](http://en.wikipedia.org/wiki/Modulo_operation) operator is 
     still an operator but it has a longer name
 
-    `3 mod 2 == 1`
+    `3 mod 2 # returns 1`
 
 ### Bitwise operators
 We have four bitwise operators in Slogo.  Bitwise operators allow for the
@@ -61,28 +61,29 @@ _Note: If you're familiar with how bitwise operations work in other languages
 feel free to skip to the next section._
 
 #### And operator
-    true and true   # true
-    true and false  # false
-    false and false # false
-    false and true  # false
+    true and true   # returns true
+    true and false  # returns false
+    false and false # returns false
+    false and true  # returns false
 
 #### Or operator
-    true or true   # true
-    true or false  # true
-    false or false # false
-    false or true  # true
+    true or true   # returns true
+    true or false  # returns true
+    false or false # returns false
+    false or true  # returns true
 
 #### Xor operator (exclusive or)
-    true xor true   # false
-    true xor false  # true
-    false xor false # false
-    false xor true  # true
+    true xor true   # returns false
+    true xor false  # returns true
+    false xor false # returns false
+    false xor true  # returns true
 
 #### Not operator
-    true not true   # true
-    true not false  # false
-    false not false # false
-    false not true  # true
+    true not true   # returns true
+    true not false  # returns false
+    false not false # returns false
+    false not true  # returns true
+ 
  
  
  
