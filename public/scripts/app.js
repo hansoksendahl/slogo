@@ -19,7 +19,7 @@ var App = (function() {
     ];
 
     // We use cookies to track which theme and which tab are currently open.
-    this.currentTheme = readCookie('theme');
+    this.currentTheme = readCookie('theme') || 'smoothness';
     this.tabIndex     = readCookie('selectedTab') || 0;
 
     // We add a prefix to the id tags of each theme we load.
