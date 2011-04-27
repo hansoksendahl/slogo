@@ -54,7 +54,11 @@ and develop code secondarily.
     `3 mod 2 == 1`
 
 ### Bitwise operators
-We have four bitwise operators in Slogo.
+We have four bitwise operators in Slogo.  Bitwise operators allow for the
+comparison of boolean values.
+
+_Note: If you're familiar with how bitwise operations work in other languages
+feel free to skip to the next section._
 
 `and`, `or`, `xor`, `not`
 
@@ -83,6 +87,7 @@ We have four bitwise operators in Slogo.
     true not false  # false
     false not false # false
     false not true  # true
+ 
  
  
  
