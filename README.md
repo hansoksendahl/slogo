@@ -58,11 +58,18 @@ We have four bitwise operators in Slogo.
 
 `and`, `or`, `xor`, `not`
 
-true and false == false
+#### And operator
 
-true or false == true
+`true and false == false`
 
-true xor false == true
+#### Or operator
 
-true not false == true 
+`true or false == true`
+
+#### Xor operator
+`true xor false == true`
+
+#### Not operator
+`true not false == true `
+ 
  
