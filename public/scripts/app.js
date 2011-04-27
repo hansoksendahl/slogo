@@ -17,9 +17,17 @@ var App = (function() {
       'sunny', 'swanky-purse', 'trontastic',
       'ui-darkness', 'ui-lightness', 'vader'
     ];
-    this.currentTheme = 'le-frog';
+
+    // We use cookies to track which theme and which tab are currently open.
+    this.currentTheme = readCookie('theme');
+    this.tabIndex     = readCookie('selectedTab') || 0;
+
+    // We add a prefix to the id tags of each theme we load.
+    // (e.g. theme-le-frog)
     this.themePrefix = 'theme-';
-    this.themeCookieExpiration = 28;
+
+    // How long should our cookies last?
+    this.cookieExpiration = 28;
 
     this.markdown = new Showdown.converter();
 
@@ -70,7 +78,7 @@ var App = (function() {
     // We have to bind scope for any event that references this class.
     // We can still access the element referenced via the event variable
     //
-    // Example: `$(evt.currentTarget);`
+    // Example: `$(evt.target);`
     var jss = {
       '@create':               this.bind('create'),
       '@resize':               this.bind('resize'),
@@ -85,16 +93,7 @@ var App = (function() {
       '#projectDocs a@click':  this.goToUrlNoEdit
     };
 
-    var theme = readCookie('theme');
-    // For some reason calls to `$('#themeChanger').trigger('change')` won't
-    // work so we're going to execute the `changeTheme` function but act like
-    // its being called form an event handler.
-    this.changeTheme(
-      {'currentTarget': $('#themeChanger')[0]},
-      [theme]
-    );  
-
-    this.markup({'currentTarget': $('#projectDocsEdit')});
+    this.markup({'target': $('#projectDocsEdit')});
 
     // apply our JSS rules to the #app id
     this.app.jss(jss);
@@ -111,15 +110,15 @@ var App = (function() {
     },
 
     'changeTab': function(evt, ui) {
-      createCookie('selectedTab', ui.index, 2);
+      this.tabIndex = ui.index
+      createCookie('selectedTab', this.tabIndex, this.cookieExpiration);
     },
 
     // Converts the #app element to a jQuery UI tabs element
     'create': function() {
-      var index = readCookie('selectedTab') || 0;
       this.app.tabs({
         'show': this.bind('jostle'),
-        'selected': index
+        'selected': this.tabIndex
       });
     },
 
@@ -143,7 +142,7 @@ var App = (function() {
       }
     },
 
-    // turn button elements into buttons
+    // Turn button elements into jQuery UI buttons
     'buttons': function(i, ele) {
       var
         self  = $(ele),
@@ -151,6 +150,7 @@ var App = (function() {
       self.button(this.buttonOptions[id]);
     },
 
+    // Create the slider that we use for speed adjustments
     'speedSlider': function(i, ele) {
       $(ele).slider({value: 50});
     },
@@ -166,9 +166,11 @@ var App = (function() {
       return enabled;
     },
 
-    'changeTheme': function(evt, title) {
-      title = title || $(evt.currentTarget).val();
-      createCookie('theme', title, this.themeCookieExpiration);
+    // Switch to the theme that the user has picked.
+    // All themes are hosted on the Google Ajax CDN
+    'changeTheme': function(evt) {
+      var title = $(evt.target).val();
+      createCookie('theme', title, this.cookieExpiration);
       this.currentTheme = this.themePrefix+title;
       if (! this.enableLoadedTheme()) {
         var
@@ -178,21 +180,40 @@ var App = (function() {
         e.appendTo('head');
       }
       this.resize();
-      // Wait a second and resize... Cheap way to deal with asynchronous requests
+      // Wait a second and resize... Cheap way to deal with asynchronous
+      // requests
       setTimeout(this.bind('resize'), 1000);
     },
 
+    // Creates our list of themes (all of which are hosted on the Google Ajax
+    // CDN).  If a theme has been set then we load it immediately via the
+    // changeTheme function.
     'themeList': function(i, ele) {
-      var self = $(ele);
+      var
+        self     = $(ele),
+        setTheme = false;
       for (var i = this.themes.length - 1; i >= 0; i--) {
-        var theme = this.themes[i];
-        $('<option value="'+theme+'">'+theme+'</option>').prependTo(self);
+        var
+          attribs = '',
+          theme   = this.themes[i];
+        if (theme == this.currentTheme) {
+          attribs = ' selected="selected"';
+          setTheme = true;
+        }
+        $('<option value="'+theme+'"'+attribs+'>'+theme+'</option>').prependTo(self);
       };
+      if (setTheme) {
+        this.changeTheme({target: self});
+      }
     },
 
+    // Documentation: View mode
+    //
+    // Convert the documentation editor from an editable textarea to a div.  Use
+    // Showdown to convert the markup to HTML.
     'markup': function(evt) {
       var
-        self = $(evt.currentTarget),
+        self = $(evt.target),
         md   = self.val();
         html = this.markdown.makeHtml(md),
         e    = $('<div id="projectDocs" class="ui-widget-content ui-corner-all">');
@@ -201,6 +222,9 @@ var App = (function() {
       self.replaceWith(e);
     },
 
+    // Documentation: Edit mode
+    //
+    // Convert the documentation to an editable text area.
     'editDocs': function() {
       var
         self = $(this),
