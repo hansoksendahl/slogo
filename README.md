@@ -60,29 +60,30 @@ comparison of boolean values.
 _Note: If you're familiar with how bitwise operations work in other languages
 feel free to skip to the next section._
 
-1. #### And operator
-        true and true   # true
-        true and false  # false
-        false and false # false
-        false and true  # false
+#### And operator
+    true and true   # true
+    true and false  # false
+    false and false # false
+    false and true  # false
 
-2. #### Or operator
-        true or true   # true
-        true or false  # true
-        false or false # false
-        false or true  # true
+#### Or operator
+    true or true   # true
+    true or false  # true
+    false or false # false
+    false or true  # true
 
-3. #### Xor operator (exclusive or)
-        true xor true   # false
-        true xor false  # true
-        false xor false # false
-        false xor true  # true
+#### Xor operator (exclusive or)
+    true xor true   # false
+    true xor false  # true
+    false xor false # false
+    false xor true  # true
 
-4. #### Not operator
-        true not true   # true
-        true not false  # false
-        false not false # false
-        false not true  # true
+#### Not operator
+    true not true   # true
+    true not false  # false
+    false not false # false
+    false not true  # true
+ 
  
  
  
