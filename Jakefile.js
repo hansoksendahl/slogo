@@ -105,6 +105,10 @@ task('web', [], function(port) {
   }).listen(port);
 
   sys.puts("Server running at http://localhost:"+port+"/");
+
+  runCommands([
+    ['git', 'checkout', 'gh-pages']
+  ]);
 });
 
 function buildCommandString(commands) {
