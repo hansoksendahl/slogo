@@ -227,13 +227,14 @@ var App = (function() {
 
     // Documentation: Edit mode
     //
-    // Convert the documentation to an editable text area.
+    // Convert the documentation to an editable text area making sure to escape 
+    // any HTML characters.
     'editDocs': function() {
       var
         self = $(this),
         md   = self.data('md'),
         e    = $('<textarea id="projectDocsEdit" class="ui-widget-content ui-corner-all">');
-      e.html(md);
+      e.html(escapeHTML(md);
       self.replaceWith(e);
       e[0].focus();
     },
@@ -243,7 +244,9 @@ var App = (function() {
     }
   };
 
-  // cookie functions http://www.quirksmode.org/js/cookies.html
+  // ## Cookies
+  //
+  // Cookie functions http://www.quirksmode.org/js/cookies.html
   var createCookie = function(name, value, days) {
     if (days) {
       var date = new Date();
@@ -252,7 +255,7 @@ var App = (function() {
     }
     else var expires = "";
     document.cookie = name+"="+value+expires+"; path=/";
-  }
+  };
 
   var readCookie = function(name) {
     var nameEQ = name + "=";
@@ -263,13 +266,38 @@ var App = (function() {
       if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
     }
     return null;
-  }
+  };
 
   var eraseCookie = function(name) {
     createCookie(name,"",-1);
-  }
+  };
 
-  return app
+  // ## String manipulation functions
+  //
+  // This function 
+  var escapeHTML = function(str) {
+    var newStr = '';
+    for (var i = 0; i < str.length; i++) {
+      var character = str[i];
+      switch (character) {
+        case '<':
+          newStr += '&lt;';
+          break;
+        case '>':
+          newStr += '&gt;';
+          break;
+        case '&':
+          newStr += '&amp;';
+          break;
+        default:
+          newStr += character;
+          break;
+      }
+    }
+    return newStr;
+  };
+
+  return app;
 }());
 
 $(document).ready(function() {
