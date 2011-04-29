@@ -108,7 +108,7 @@ task('web', [], function(port) {
 
   runCommands([
     ['git', 'checkout', 'gh-pages']
-  ]);
+  ], 'Switched to "gh-pages" branch');
 });
 
 function buildCommandString(commands) {
