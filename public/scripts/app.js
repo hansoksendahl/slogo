@@ -79,21 +79,29 @@ var App = (function() {
     // _[optional: no event name implies "create" event]_ jQuery 
     //
     // We have to bind scope for any event that references this class.
-    // We can still access the element referenced via the event variable
+    // We can still access the element referenced via the event variable.  As a
+    // rule of thumb we bind functions when they might be called more thane once
+    // during that elements lifetime.
+    //
+    // Example:
+    //     function(evt) {
+    //       var self = $(evt.target);
+    //     }
     //
     // Example: `$(evt.target);`
     var jss = {
-      '@create':               this.bind('create'),
-      '@resize':               this.bind('resize'),
-      '@tabsselect':           this.changeTab,
-      'button':                this.bind('buttons'),
-      '.buttonset':            function() { $(this).buttonset(); },
-      '.toolbar #speed':       this.bind('speedSlider'),
-      '#themeChanger':         this.bind('themeList'),
-      '#themeChanger@change':  this.bind('changeTheme'),
-      '#projectDocsEdit@blur': this.bind('markup'),
-      '#projectDocs@click':    this.editDocs,
-      '#projectDocs a@click':  this.goToUrlNoEdit
+      '@create':                                 this.bind('tabs'),
+      '@resize':                                 this.bind('resize'),
+      '@tabsselect':                             this.changeTab,
+      'button':                                  this.bind('buttons'),
+      '.buttonset':                              function() { $(this).buttonset(); },
+      '.toolbar #speed':                         this.bind('speedSlider'),
+      '#themeChanger':                           this.bind('themeList'),
+      '#themeChanger@change':                    this.bind('changeTheme'),
+      '#projectDocsEdit@blur':                   this.bind('markup'),
+      '#projectDocs@click':                      this.editDocs,
+      '#projectDocs a@click':                    this.goToUrlNoEdit,
+      '#projectDocs .latex':                     this.latex,
     };
 
     this.markup({'target': $('#projectDocsEdit')});
@@ -118,7 +126,7 @@ var App = (function() {
     },
 
     // Converts the #app element to a jQuery UI tabs element
-    'create': function() {
+    'tabs': function() {
       this.app.tabs({
         'show': this.bind('jostle'),
         'selected': this.tabIndex
@@ -233,20 +241,36 @@ var App = (function() {
       var
         self = $(this),
         md   = self.data('md'),
-        e    = $('<textarea id="projectDocsEdit" class="ui-widget-content ui-corner-all">');
-      e.html(escapeHTML(md);
+        e    = $('<textarea id="projectDocsEdit" class="ui-widget ui-corner-all">');
+      e.text(md);
       self.replaceWith(e);
       e[0].focus();
     },
 
     'goToUrlNoEdit': function(evt) {
       window.location = $(evt.target).attr('href');
+    },
+
+    // This is a clever hack from the internet.  It replaces any element with
+    // the class "latex" with an image produced with the Google Chart API.
+    'latex': function(evt) {
+      var
+        self = $(this),
+        textColor = rgbToHex($('.ui-widget-content').css('color')),
+        img   = $('<img>').attr({
+          'src': "http://chart.apis.google.com/chart?chco="+textColor+"&chf=bg,s,00000000&cht=tx&chl=" + encodeURIComponent(self.text()),
+          'alt': 'A LaTeX equation'
+        });
+      self.replaceWith(img);
     }
   };
 
+
+
   // ## Cookies
   //
-  // Cookie functions http://www.quirksmode.org/js/cookies.html
+  // Cookie functions borrowed from
+  // [quirksmode.org](http://www.quirksmode.org/js/cookies.html)
   var createCookie = function(name, value, days) {
     if (days) {
       var date = new Date();
@@ -272,30 +296,14 @@ var App = (function() {
     createCookie(name,"",-1);
   };
 
-  // ## String manipulation functions
-  //
-  // This function 
-  var escapeHTML = function(str) {
-    var newStr = '';
-    for (var i = 0; i < str.length; i++) {
-      var character = str[i];
-      switch (character) {
-        case '<':
-          newStr += '&lt;';
-          break;
-        case '>':
-          newStr += '&gt;';
-          break;
-        case '&':
-          newStr += '&amp;';
-          break;
-        default:
-          newStr += character;
-          break;
-      }
-    }
-    return newStr;
-  };
+  function hex(x) {
+      return ("0" + parseInt(x).toString(16)).slice(-2);
+  }
+
+  function rgbToHex(rgb) {
+      rgb = rgb.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/);
+      return hex(rgb[1]) + hex(rgb[2]) + hex(rgb[3]);
+  }
 
   return app;
 }());
@@ -305,4 +313,11 @@ $(document).ready(function() {
 
   app.resize();
   $(window).resize(function(evt) { app.resize(); });
+
+  $('body').jss({
+    'pre code': function() {
+      var self = $(this);
+      self.addClass('ui-widget');
+    },
+  })
 });

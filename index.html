@@ -4,116 +4,119 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Slogo</title>
+    <title>Slogo: A programming language with a healthy dose of slugs</title>
     <link type="text/css" href="./public/styles/import.css" rel="stylesheet">
-    <link type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.11/themes/base/jquery-ui.css" rel="stylesheet">
+    <link type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.11/themes/south-street/jquery-ui.css" rel="stylesheet">
   </head>
 
   <body>
-    <section id="app">
+    <img id="logo" src="./public/images/logo.png" style="display:block; margin:0 auto;">
+
+    <section id="docs" style="width: 600px; margin: 0 auto; font-size: 1.4em">
       <header class="tabs">
         <ul>
-          <li><a href="#tabs-1">Application</a></li>
-          <li><a href="#tabs-2">Documentation</a></li>
-          <li><a href="#tabs-3">Source Code</a></li>
+          <li><a href="#tabs-1">Introduction</a></li>
+          <li><a href="#tabs-2">Abstract</a></li>
+          <li><a href="#tabs-3">Syntax</a></li>
+          <li><a href="#tabs-4">License</a></li>
+          <li><a href="#tabs-5">Try It</a></li>
         </ul>
       </header>
 
       <section id="tabs-1">
-        <section id="tab1-toolbar" class="toolbar ui-widget-header ui-corner-all">
-          <button id="newControl">New Control</button>
-          <div class="slider" id="speed"></div>
-          <span id="updateOn" class="buttonset">
-            <input checked="checked" id="continuous" name="updateOn" type="radio" value="continuous">
-            <label for="continuous">continuous</label>
-            <input id="ticks" name="updateOn" type="radio" value="on ticks">
-            <label for="ticks">on ticks</label>
-          </span>
-          <button id="settings">Settings</button>
-          <br class="clear">
-        </section>
+       <textarea class="markdown">
+# Slogo
+**Slogo** is a multi-agent programmable modelling environment for WebGL.  Slogo
+provides an <abbr title="Application Programming Interface">API</abbr> and 
+graphics framework for producing hardware-accelerated
+[turtle graphics](http://en.wikipedia.org/wiki/Turtle_graphics).
 
-        <section id="controls" class="">
-        test
-        </section>
-        <div id="universe">
-          <canvas id="world"></canvas>
-        </div>
-        <br class="clear">
+_Note: The specification is still under development (pre-alpha)._
+
+## Mascot
+Every open-source project needs a mascot.  This project's mascot is Slogo the
+slug.
+
+    . .
+     \_\
+     (_ `.,--.__
+      \  (__.'  `.
+       `~~~~~~~~~~' ~~ ~~ ~~
+        </textarea>
       </section>
 
       <section id="tabs-2">
-        <textarea id="projectDocsEdit">
-# Documentation
+        <textarea class="markdown">
+# Slogo
 
-Slogo uses the [Showdown](https://github.com/coreyti/showdown) library.  Showdown is a Javascript variant of
-[Markdown](http://daringfireball.net/projects/markdown/syntax), it makes producing nice looking documentation easy.
+Slogo is a [context-free grammar](http://en.wikipedia.org/wiki/Context_free_grammar)
+which leverages several existing Javascript libraries.
 
-## Instructions
+Most notable of these libraries are:
 
-This file serves as its own instruction manual.
+* [Jison](#jison) - a Javascript parser generator
+* [WebGL](#webgl) - a 3d graphics specification
 
-1. Click on this text to enter _edit_ mode.
-2. Click somewhere else to return to _view_ mode.
+# Jison
 
-## Markdown Syntax
+Slogo makes use of the [Jison](https://github.com/zaach/jison)
+Javascript library to simplify the process of defining a formal grammar.  Jison
+takes a context-free grammar as input and produces a javascript file capable of
+parsing the specified grammar.
 
-### Links
+Jison has modes to recognize languages described by the following grammars:
 
-Links like [this one](http://google.com) are easy to produce with Markdown.
+* [LALR(1)](http://en.wikipedia.org/wiki/LALR_parser)
+* [LR(0)](http://en.wikipedia.org/wiki/LR_parser)
+* [SLR(1)](http://en.wikipedia.org/wiki/SLR_grammar)
+* [LR(1)](http://en.wikipedia.org/wiki/Canonical_LR_parser) _canonical LR parsers_
 
-### Images
+It also has a special mode for generating
+[LL(1)](http://en.wikipedia.org/wiki/LL_parser) parse tables
 
-![Sword fern fiddlehead](http://j.mp/fFR7Gi 'Sword fern fiddlehead')
+> ## Bison
+>
+> Jison is modeled after [Bison](http://www.gnu.org/software/bison/) a parser
+> generator for the C progamming language.  Bison is a parser generator that
+> converts an annotated context-free grammar into an LALR(1) or
+> [GLR](http://en.wikipedia.org/wiki/Glr_parser) parser for that grammar.
 
-### Lists
+# WebGL
 
-Markdown can produce un-ordered lists.
+[WebGL](http://en.wikipedia.org/wiki/WebGL) is a recently released specification
+for modern browsers.  It extends Javascript with the ability to generate 3D
+graphics.  WebGL enables the creation of hardware-accelerated graphics as it
+communicates directly to the <abbr title="Graphics Processing Unit">GPU</abbr>
+on the host computer.
 
-* oranges
-* apples
-* bananas
-
-Markdown can make ordered lists too.
-
-1. read
-2. eat
-3. sleep
-
-### Blockquotes
-
-> Blockquotes aren't all that hard with Markdown.
-
-### Code
-
-Code can be `written.inline()`.
-
-    code.blocks(
-      are("easy", "too")
-    );
-</textarea>
+Slogo makes use of Jison's ability to share the scope of a grammar with other
+parts of Javascript via the [`yy` variable](http://zaach.github.com/jison/docs/#sharing-scope).
+When a Slogo program is parsed it makes direct calls to WebGL via the Slogo
+graphics framework.
+        </textarea>
       </section>
 
       <section id="tabs-3">
-        <textarea id="sourceCode">
-# Code goes here.
-</textarea>
+        <textarea class="markdown">
+        yar
+        </textarea>
       </section>
 
-      <footer class="ui-widget-header ui-corner-all">
-        <div id="theme">
-          <label for="themeChanger">Theme:</label>
-          <select id="themeChanger">
-          </select>
-        </div>
-        <div id="copyright">
-          <a href="hansoksendahl.com">Hans Oksendahl</a>
-          , 2011.
-          <a href="https://github.com/hansineffect/Slogo/blob/master/COPYING">MIT User License</a>
-        </div>
-        <br class="clear">
-      </footer>
+      <section id="tabs-4">
+        <textarea class="markdown">
+        blah
+        </textarea>
+      </section>
 
+      <section id="tabs-5">
+        <textarea class="markdown">
+# Try Slogo Online
+The Slogo project includes a browser based <abbr title="Integrated Development Environment">IDE</abbr>
+so you can get started creating your own Slogo simulations.
+
+Just [click here](/app.html) to get started.
+        </textarea>
+      </section>
     </section>
 
     <!-- We're going jQuery this round -->
@@ -134,6 +137,6 @@ Code can be `written.inline()`.
     <script type="text/javascript" src="https://github.com/coreyti/showdown/raw/master/src/showdown.js"></script>
 
     <!-- Our app script -->
-    <script type="text/javascript" src="./public/scripts/app.js"></script>
+    <script type="text/javascript" src="./public/scripts/index.js"></script>
   </body>
 </html> 
