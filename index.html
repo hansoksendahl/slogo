@@ -181,17 +181,16 @@ blocks.  Blocks return their last statement by default.
 
 ### Anonymous Blocks
 
-    to bind |procedure, scope|
+    to bind |func, scope|
       to
-        procedure.apply(scope, arguments)
+        func.apply(scope, arguments)
       end
     end
 
 ### Closures
 
-Closures build on the idea of blocks.  It's a function two levels deep.
-
-Using closures we can bind the scope of a function to a particular object
+Closures build on the idea of blocks.  Using closures we can bind the scope of a
+function to a particular object
 
     to run
       @motivation
