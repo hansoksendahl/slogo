@@ -175,33 +175,33 @@ blocks.  Blocks return their last statement by default.
 
 ### Block Examples
 
-    to
-      'test'
-    end
-
-    &nbsp;
-
-    to onePlusOne
-      1 + 1
-    end
-
-    &nbsp;
-
     to add |a, b|
       a + b
     end
 
+### Anonymous Blocks
+
+    to bind |procedure, scope|
+      to
+        procedure.apply(scope, arguments)
+      end
+    end
+
 ### Closures
+
+Closures build on the idea of blocks.  It's a function two levels deep.
 
 Using closures we can bind the scope of a function to a particular object
 
-    to parent
-      @blah = 'test'
-
-      do(this)
-        @blah
-      end
+    to run
+      @motivation
     end
+
+    more = {
+      motivation: 'Yes!'
+    }
+
+    do run(more) # returns 'Yes!'
 
         </textarea>
       </section>
