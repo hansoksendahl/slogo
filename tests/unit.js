@@ -11,7 +11,7 @@ var Slogo = require('../lib/grammar');
 var assert = require('assert');
 
 exports.parse = function() {
-  console.log(Slogo.parser.parse.apply(Slogo.parser, arguments));
+  console.log(Slogo.parse.apply(Slogo.parser, arguments));
 }
 
 // This function takes a list of Slogo strings and they're expected outputs and
