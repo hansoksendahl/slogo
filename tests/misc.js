@@ -1,3 +1,3 @@
 var unit = require('./unit');
 
-unit.parse('[test, "test", 1]');
+unit.parse('to blah |a, b| [a,b] end');
