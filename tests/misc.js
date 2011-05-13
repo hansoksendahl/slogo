@@ -1,3 +1,11 @@
 var unit = require('./unit');
+var fs = require('fs');
 
-unit.parse('to blah |a, b| [a,b] end');
+var path = fs.realpathSync();
+
+var test = fs.readFileSync(path+'/tests/misc.sl', 'utf-8')
+
+var parsed = unit.parse(test);
+
+
+console.log(eval(parsed));
