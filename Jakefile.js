@@ -1,5 +1,6 @@
 var sys = require('sys'),
-    ps  = require('child_process');
+    ps  = require('child_process'),
+    fs  = require('fs');
 
 // desc('This is the default task.');
 // task('default', [], function () {
@@ -27,7 +28,21 @@ task('deploy', [], function () {
   ], 'Deployed!');
 });
 
-// Unfortunately I have to be extremely explicit in these instructions because
+desc('Generates a parser and saves it to the build directory');
+task('generate', [], function() {
+  var
+    grammar = require('./lib/grammar');
+    name    = './builds/build-'+(new Date())+'.js'
+  fs.writeFile(name, grammar.generate(), function(err) {
+    if (err) {
+      console.log(err);
+    }
+    else {
+      console.log('Built!');
+    }
+  });
+});
+//   I have to be extremely explicit in these instructions because
 // permissions are screwed up in my development directory (Thanks a lot
 // Virtualbox!)
 //
@@ -39,16 +54,23 @@ desc('Generating source-code documentaion');
 task('docs', [], function() {
   var ghPagesDir = '../gh-pages'
   runCommands([
+    // generate the main documentation
     ['cd', '"'+__dirname+'"'],
     ['./ext/docco/bin/docco', './lib/*.js'],
-    ['mv', './docs', ghPagesDir+'/docs'],
-    ['cd', ghPagesDir+'/docs'],
-    // ensure we have SOMETHING to commit
-    ['echo', '" "', '>>', 'index.html'],
-    ['git', 'add', '.'],
-    ['git', 'commit', '-m', '"built on: '+(new Date())+'"']
+    ['cd', ghPagesDir],
+    ['git', 'rm', '-r', 'docs', '--ignore-unmatch', '--quiet'],
+    ['mv', __dirname+'/docs', '.'],
+    // generate the scope documentation
+    ['cd', '"'+__dirname+'"'],
+    ['./ext/docco/bin/docco', './lib/scope/*.js'],
+    ['cd', ghPagesDir],
+    ['mv', __dirname+'/docs', './docs'],
+    ['mv', './docs/docs', './docs/scope'],
+
+    ['git', 'add', 'docs'],
+    ['git', 'commit', '-m', '"built on: '+(new Date())+'"'],
     ['git', 'push', 'origin', 'gh-pages']
-  ], 'Documentation generated!');
+  ], 'Docs Pushed')
 });
 
 function buildCommandString(commands) {

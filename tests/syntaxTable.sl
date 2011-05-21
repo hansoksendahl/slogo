@@ -4,19 +4,15 @@ class SyntaxTable
     @push()
   end
 
-  to setContext
-    set @context, @table[@table.length - 1]
-    <- @
-  end
-
   to push
-    @table.push({})
-    <- @setContext()
+    let prev, (this.context) ? JSON.parse(JSON.stringify(@context)) : {}
+    @table.push(prev)
+    <- @_setContext()
   end
 
   to pop
     @table.pop()
-    <- @setContext()
+    <- @_setContext()
   end
 
   to set |k, v|
@@ -27,13 +23,9 @@ class SyntaxTable
   to get |k|
     <- @context[k]
   end
+
+  to _setContext
+    set @context, @table[@table.length - 1]
+    <- @
+  end
 end
-
-let sb, new SyntaxTable()
-sb.set('state', 'This is the first state')
-sb.push()
-sb.set('state', 'This is the second state')
-
-sb.get('state')
-sb.pop()
-sb.get('state')
