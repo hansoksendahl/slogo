@@ -29,10 +29,11 @@ task('deploy', [], function () {
 });
 
 desc('Generates a parser and saves it to the build directory');
-task('generate', [], function() {
+task('build', [], function() {
   var
+    d       = new Date(),
     grammar = require('./lib/grammar');
-    name    = './builds/build-'+(new Date())+'.js'
+    name    = './builds/build-'+([d.getFullYear(), d.getMonth() + 1, d.getDate(), d.getHours(), d.getMinutes(), d.getSeconds()].join('-'))+'.js'
   fs.writeFile(name, grammar.generate(), function(err) {
     if (err) {
       console.log(err);
@@ -60,12 +61,6 @@ task('docs', [], function() {
     ['cd', ghPagesDir],
     ['git', 'rm', '-r', 'docs', '--ignore-unmatch', '--quiet'],
     ['mv', __dirname+'/docs', '.'],
-    // generate the scope documentation
-    ['cd', '"'+__dirname+'"'],
-    ['./ext/docco/bin/docco', './lib/scope/*.js'],
-    ['cd', ghPagesDir],
-    ['mv', __dirname+'/docs', './docs'],
-    ['mv', './docs/docs', './docs/scope'],
 
     ['git', 'add', 'docs'],
     ['git', 'commit', '-m', '"built on: '+(new Date())+'"'],
