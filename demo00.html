@@ -1,0 +1,231 @@
+<!-- Markup generators make you so damn lazy -->
+
+<!-- Writing all of this markup was like running a marathon for me. -Hans -->
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Slogo</title>
+    <link type="text/css" href="./public/styles/import.css" rel="stylesheet">
+    <link type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.13/themes/base/jquery-ui.css" rel="stylesheet">
+  </head>
+
+  <body>
+    <section id="app">
+      <header class="tabs">
+        <ul>
+          <li><a href="#tabs-1">Live Demo</a></li>
+          <li><a href="#tabs-2">Documentation</a></li>
+        </ul>
+      </header>
+
+      <section id="tabs-1">
+        <section id="controls">
+          <div class="buttons" style="position:absolute;">
+            <button id="run">Run!</button>
+            <button id="source" style="display: none">Parsed Output</button>
+          </div>
+          <textarea id="sourceCode" data-autoRun="true">
+class Demo extends Slogo
+  to constructor
+    parent.call(@)
+    set @camera.position = {x: 0, y: 0, z: 2}
+    @initShape()
+  end
+
+  to initShape
+    let shape = new THREE.Mesh(
+      new THREE.CubeGeometry(1, 1, 1),
+      [
+        new THREE.MeshBasicMaterial({
+          color: randomInt(0xffffff),
+          wireframe: yes
+        })
+      ]
+    )
+    @scene.addObject(shape)
+  end
+end
+
+let demo = new Demo()
+demo.render()
+</textarea>
+        </section>
+
+        <div id="universe">
+        </div>
+
+        <br class="clear">
+      </section>
+
+      <section id="tabs-2">
+        <textarea id="projectDocsEdit">
+_Next - [Animation](./demo01.html)_
+
+# Introduction to Slogo
+
+![Slogo the slug](./public/images/Slogo.png "Slogo the slug") This demo makes
+use of the [Three.js](https://github.com/mrdoob/three.js/) graphics framework to
+render a shape in three dimensions.
+
+To render in Three.js we need four objects defined.
+
+1. A **scene**
+2. A **camera**
+3. A **renderer**
+4. A **mesh** to render
+  * _A **light** if any material uses Phong or Lambert shading_
+
+Let's walk through the code in this first example and see exactly what it's doing.
+
+    class Demo extends Slogo
+      to constructor
+        parent.call(@)
+        set @camera.position = {x: 0, y: 0, z: 2}
+        @initShape()
+      end
+
+      to initShape
+        let shape = new THREE.Mesh(
+          new THREE.Cube(1, 1, 1),
+          [
+            new THREE.MeshBasicMaterial({
+              color: randomInt(0xffffff),
+              wireframe: yes
+            })
+          ]
+        )
+        @scene.addObject(shape)
+      end
+    end
+
+    let demo = new Demo()
+    demo.render()
+
+## Class Declaration
+
+    class Demo extends Slogo
+
+We begin by creating a new class called `Demo` which extends the [`Slogo`
+class](https://github.com/hansineffect/Slogo/blob/gh-pages/public/scripts/slogo.js).  The Slogo is a simple [Three.js](https://github.com/mrdoob/three.js/) wrapper which gives us a good starting point
+for rendering.
+
+## Class Constructor
+
+    to constructor
+      parent.call(@)
+      set @camera.position = {x: 0, y: 0, z: 2}
+      @initShape()
+      @render()
+    end
+    
+Here we define the class constructor (This procedure is run every time we create
+a new instance of `Demo`.).
+
+First we make a call to the `Slogo` constructor (binding scope to `Demo`).
+The Slogo constructor initializes the **scene**, **camera**, and **renderer**
+objects for us.  It also provides the methods `bind`, `render`, and `animate`
+which we'll explore in later examples.
+
+Next, the **camera** position is set, pulling it back just slightly from the origin.
+
+Then a shape is added to the **scene**.
+
+## Class Procedure `initShape`
+
+      to initShape
+        let shape = new THREE.Mesh(
+          new THREE.Cube(1, 1, 1),
+          [
+            new THREE.MeshBasicMaterial({
+              color: randomInt(0xffffff),
+              wireframe: yes
+            })
+          ]
+        )
+        @scene.addObject(shape)
+      end
+
+In the `initShape` procedure we define the **geometry** and **materials** for a shape.
+
+We define the geometry as a cube with a volume of one unit.
+
+The cube has a randomly colored wire mesh for **materials**.
+
+## Rendering
+
+    let demo = new Demo()
+    demo.render()
+
+Here we create a new instance of Demo.  Then we render using the `Slogo`
+class' `render` function.
+
+## Review
+
+Here we looked at the Slogo class which takes care of defining the **scene**,
+**renderer**, and **camera** objects.
+
+We created a **mesh** containing **geometry** and **materials**.
+
+Finally, we rendered the **scene** using the `render` method of the `Slogo` class.
+
+## Next Lesson
+
+Demo #2: [Animation](./demo01.html)
+<br>
+<br>
+
+</textarea>
+      </section>
+
+      <footer class="ui-widget-header ui-corner-all">
+        <div id="theme">
+          <label for="themeChanger">Theme:</label>
+          <select id="themeChanger">
+          </select>
+        </div>
+        <div id="copyright">
+          <a href="hansoksendahl.com">Hans Oksendahl</a>
+          , 2011.
+          <a href="https://github.com/hansineffect/Slogo/blob/master/COPYING">MIT User License</a>
+        </div>
+        <br class="clear">
+      </footer>
+
+    </section>
+
+    <div id="modal" class="dialog" title="Parsed Output" style="display:none;height:0"></div>
+
+    <!-- We're going jQuery this round -->
+
+    <!-- Include jQuery & jQuery UI -->
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.js"></script>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.13/jquery-ui.min.js"></script>
+
+    <!-- Include our scripts and plugins -->
+
+    <!-- Jeremy Hynds "create" event for jQuery -->
+    <script type="text/javascript" src="./public/scripts/jquery-create-event.js"></script>
+
+    <!-- The JSS Plugin ...Winning! -->
+    <script type="text/javascript" src="./public/scripts/jquery-jss.js"></script>
+
+    <!-- Our app script -->
+    <script type="text/javascript" src="./public/scripts/app.js"></script>
+
+    <!-- Showdown the Markdown library for Javascript -->
+    <script type="text/javascript" src="https://github.com/coreyti/showdown/raw/master/src/showdown.js"></script>
+
+    <!-- Our parser -->
+    <script type="text/javascript" src="./public/scripts/grammar.js"></script>
+
+    <!-- Three.js -->
+    <script type="text/javascript" src="http://mrdoob.github.com/three.js/build/Three.js"></script>
+
+    <!-- JsBeautify -->
+    <script type="text/javascript" src="https://github.com/einars/js-beautify/raw/master/beautify.js"></script>
+
+    <!-- Slogo -->
+    <script type="text/javascript" src="./public/scripts/slogo.js"></script>
+    
+  </body>
+</html> 

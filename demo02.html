@@ -1,0 +1,326 @@
+<!-- Markup generators make you so damn lazy -->
+
+<!-- Writing all of this markup was like running a marathon for me. -Hans -->
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Slogo</title>
+    <link type="text/css" href="./public/styles/import.css" rel="stylesheet">
+    <link type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.11/themes/base/jquery-ui.css" rel="stylesheet">
+  </head>
+
+  <body>
+    <section id="app">
+      <header class="tabs">
+        <ul>
+          <li><a href="#tabs-1">Live Demo</a></li>
+          <li><a href="#tabs-2">Documentation</a></li>
+        </ul>
+      </header>
+
+      <section id="tabs-1">
+        <section id="controls">
+          <div class="buttons" style="position:absolute;">
+            <button id="run">Run!</button>
+            <button id="source" style="display: none">Parsed Output</button>
+          </div>
+          <textarea id="sourceCode" data-autoRun="true">
+class Demo extends Slogo
+  to constructor
+    parent.call(@)
+    set
+      @radius = 2,
+      @theta  = nil,
+      @phi    = nil,
+      @halfX  = @container.offsetWidth * 0.5,
+      @halfY  = @container.offsetHeight * 0.5,
+      @camera.position = {x: 0, y: 0, z: 2}
+    @initShape()
+  end
+
+  to initShape
+    let shape = new THREE.Mesh(
+      new THREE.CubeGeometry(1, 1, 1),
+      [
+        new THREE.MeshBasicMaterial({
+          color: randomInt(0xffffff),
+          opacity: 80%
+        }),
+        new THREE.MeshBasicMaterial({
+          color: randomInt(0xffffff),
+          wireframe: true
+        })
+      ]
+    )
+    @scene.addObject(shape)
+  end
+
+  to move |event|
+    set
+      @theta = 0.002 * (event.clientX - @halfX),
+      @phi   = 0.002 * (event.clientY - @halfY)
+  end
+
+  to animate
+    set
+      @camera.position = {
+        x: @radius * cos(@theta),
+        y: @radius * sin(@phi),
+        z: @radius * sin(@theta)
+      }
+    parent.call(@)
+  end
+end
+
+let demo = new Demo()
+$(document).mousemove(demo.bind('move'))
+demo.animate()
+
+</textarea>
+        </section>
+
+        <div id="universe">
+        </div>
+
+        <br class="clear">
+        
+      </section>
+
+      <section id="tabs-2">
+        <textarea id="projectDocsEdit">
+_Previous - [Animation](./demo01.html) | Next - [Lighting](./demo03.html)_
+
+# Interactivity
+
+![Slogo the slug](./public/images/Slogo.png "Slogo the slug") This demo
+explores binding the `mousemove` **event** to our **camera** object.
+
+The documentation will walk you through the source code line by line explaining
+what the various statements do.
+
+    class Demo extends Slogo
+      to constructor
+        parent.call(@)
+        set
+          @radius = 2,
+          @theta  = nil,
+          @phi    = nil,
+          @halfX  = @container.offsetWidth * 0.5,
+          @halfY  = @container.offsetHeight * 0.5,
+          @camera.position = {x: 0, y: 0, z: 2}
+        @initShape()
+      end
+
+      to initShape
+        let shape = new THREE.Mesh(
+          new THREE.Cube(1, 1, 1),
+          [
+            new THREE.MeshBasicMaterial({
+              color: randomInt(0xffffff),
+              opacity: 80%
+            }),
+            new THREE.MeshBasicMaterial({
+              color: randomInt(0xffffff),
+              wireframe: true
+            })
+          ]
+        )
+        @scene.addObject(shape)
+      end
+
+      to move |event|
+        set
+          @theta = 0.002 * (event.clientX - @halfX),
+          @phi   = 0.002 * (event.clientY - @halfY)
+      end
+
+      to animate
+        set
+          @camera.position = {
+            x: @radius * cos(@theta),
+            y: @radius * sin(@phi),
+            z: @radius * sin(@theta)
+          }
+        parent.call(@)
+      end
+    end
+
+    let demo = new Demo()
+    $(document).mousemove(demo.bind('move'))
+    demo.animate()
+
+## Class Declaration
+
+    class Demo extends Slogo
+
+We begin by extending the [`Slogo` class](https://github.com/hansineffect/Slogo/blob/gh-pages/public/scripts/slogo.js).
+
+## Class Constructor
+
+    to constructor
+      parent.call(@)
+      set
+        @radius = 2,
+        @theta  = nil,
+        @phi    = nil,
+        @halfX  = @container.offsetWidth * 0.5,
+        @halfY  = @container.offsetHeight * 0.5,
+        @camera.position = {x: 0, y: 0, z: 2}
+      @initShape()
+    end
+
+The `Demo` constructor procedure is called every time we create a new instance
+of `Demo`.
+
+First a call is made to the `Slogo` constructor which initializes our Three.js
+objects **scene**, **camera**, and **renderer**.
+
+Next some variables are set for tracking the mouse and the **camera** is
+positioned.
+
+Finally, a shape is initialized and added to the **scene**.
+
+## Class Procedure `initShape`
+
+    to initShape
+      let shape = new THREE.Mesh(
+        new THREE.Cube(1, 1, 1),
+        [
+          new THREE.MeshBasicMaterial({
+            color: randomInt(0xffffff),
+            opacity: 80%
+          }),
+          new THREE.MeshBasicMaterial({
+            color: randomInt(0xffffff),
+            wireframe: true
+          })
+        ]
+      )
+      @scene.addObject(shape)
+    end
+
+Here a new **mesh** is created with defined **geometry** and **materials**.
+
+The **geometry** for the **mesh** is a cube.
+
+The **materials** for the **mesh** are a randomly colored solid with 80%
+transparency, and a randomly colored wireframe.
+
+## Class Procedure `move`
+
+    to move |event|
+      set
+        @theta = 0.002 * (event.clientX - @halfX),
+        @phi   = 0.002 * (event.clientY - @halfY)
+    end
+
+This procedure is called every time the mouse is moved.
+
+The `move` procedure references the data retured from the mousemove **event**
+to calculate new <em class="latex">\theta</em> and
+<em class="latex">\varphi</em> values.
+
+## Class Procedure `animate`
+
+    to animate
+      set
+        @camera.position = {
+          x: @radius * cos(@theta),
+          y: @radius * sin(@phi),
+          z: @radius * sin(@theta)
+        }
+      parent.call(@)
+    end
+
+In the `animate` procedure we update the camera position relative to the values
+for <em class="latex">\theta</em> and <em class="latex">\varphi</em> defined by
+the `move` procedure.
+
+Finally a call is made to the `animate` procedure of `Slogo`.
+
+## Event Binding &amp; Animation
+
+    let demo = new Demo()
+    $(document).mousemove(demo.bind('move'))
+    demo.animate()
+
+First a new instance of `Demo` is created.
+
+Then jQuery is used to bind the mousemove event to the the `move` procedure of
+the `Demo` class.
+
+Finally, a call is made to the `Demo` class' `animate` procedure which starts
+the rendering loop.
+
+## Review
+
+In this demonstration we created a new `Slogo` instance which defines the **scene**, **camera**, and
+**renderer** objects.
+
+A **mesh** was created with defined **geometry**, and **materials**.
+
+The mouse position was tracked using an **event** listener.
+
+Finally, the **scene** was rendered using the `animate` procedure.
+
+## Next Lesson
+
+Demo #4: [Lighting](./demo03.html)
+<br>
+<br>
+
+</textarea>
+      </section>
+
+      <footer class="ui-widget-header ui-corner-all">
+        <div id="theme">
+          <label for="themeChanger">Theme:</label>
+          <select id="themeChanger">
+          </select>
+        </div>
+        <div id="copyright">
+          <a href="hansoksendahl.com">Hans Oksendahl</a>
+          , 2011.
+          <a href="https://github.com/hansineffect/Slogo/blob/master/COPYING">MIT User License</a>
+        </div>
+        <br class="clear">
+      </footer>
+
+    </section>
+
+    <div id="modal" class="dialog" title="Parsed Output" style="display:none;height:0"></div>
+
+    <!-- We're going jQuery this round -->
+
+    <!-- Include jQuery & jQuery UI -->
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.js"></script>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.13/jquery-ui.min.js"></script>
+
+    <!-- Include our scripts and plugins -->
+
+    <!-- Jeremy Hynds "create" event for jQuery -->
+    <script type="text/javascript" src="./public/scripts/jquery-create-event.js"></script>
+
+    <!-- The JSS Plugin ...Winning! -->
+    <script type="text/javascript" src="./public/scripts/jquery-jss.js"></script>
+
+    <!-- Our app script -->
+    <script type="text/javascript" src="./public/scripts/app.js"></script>
+
+    <!-- Showdown the Markdown library for Javascript -->
+    <script type="text/javascript" src="https://github.com/coreyti/showdown/raw/master/src/showdown.js"></script>
+
+    <!-- Our parser -->
+    <script type="text/javascript" src="./public/scripts/grammar.js"></script>
+
+    <!-- Three.js -->
+    <script type="text/javascript" src="http://mrdoob.github.com/three.js/build/Three.js"></script>
+
+    <!-- JsBeautify -->
+    <script type="text/javascript" src="https://github.com/einars/js-beautify/raw/master/beautify.js"></script>
+
+    <!-- Slogo -->
+    <script type="text/javascript" src="./public/scripts/slogo.js"></script>
+    
+  </body>
+</html> 

@@ -1,0 +1,321 @@
+<!-- Markup generators make you so damn lazy -->
+
+<!-- Writing all of this markup was like running a marathon for me. -Hans -->
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Slogo</title>
+    <link type="text/css" href="./public/styles/import.css" rel="stylesheet">
+    <link type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.11/themes/base/jquery-ui.css" rel="stylesheet">
+  </head>
+
+  <body>
+    <section id="app">
+      <header class="tabs">
+        <ul>
+          <li><a href="#tabs-1">Live Demo</a></li>
+          <li><a href="#tabs-2">Documentation</a></li>
+        </ul>
+      </header>
+
+      <section id="tabs-1">
+        <section id="controls">
+          <div class="buttons" style="position:absolute;">
+            <button id="run">Run!</button>
+            <button id="source" style="display: none">Parsed Output</button>
+          </div>
+          <textarea id="sourceCode" data-autoRun="true">
+class Demo extends Slogo
+  to constructor
+    parent.call(@)
+    let @counter = 0
+    @initLight()
+    @initShapes()
+  end
+
+  to initLight
+    let light = new THREE.PointLight(0xFFFFFF)
+    @scene.addLight(light)
+  end
+
+  to initShapes
+    [1..100].forEach(@bind('initShape'))
+  end
+
+  to initShape
+    let
+      shape = new THREE.Mesh(
+        new THREE.SphereGeometry(1, 20, 20),
+        [
+          new THREE.MeshPhongMaterial({color: randomInt(0xffffff)})
+        ]
+      ),
+      shape.position = {
+        x: random() * 20 - 10,
+        y: random() * 20 - 10,
+        z: random() * 20 - 10
+      }
+    @scene.addObject(shape)
+  end
+
+  to animate
+    set
+      @camera.position.z = 20 * sin(@counter * 1%),
+      @camera.position.x = 20 * cos(@counter * 1%)
+    parent.call(@)
+    set @counter += 1
+  end
+end
+
+let demo = new Demo()
+demo.animate()
+</textarea>
+        </section>
+
+        <div id="universe">
+        </div>
+
+        <br class="clear">
+        
+      </section>
+
+      <section id="tabs-2">
+        <textarea id="projectDocsEdit">
+_Previous - [Interactivity](./demo02.html) | Next - [Textures](./demo04.html)_
+# Lighting
+
+![Slogo the slug](./public/images/Slogo.png "Slogo the slug") This demo uses
+Three.js to animate a number of objects using the [Phong](http://en.wikipedia.org/wiki/Phong_shading) shading
+technique.  Since this is the first demo covering lighting here is a short
+review of rendering in Three.js.
+
+To render with a light source in Three.js we need five objects defined.
+
+1. A **scene**
+2. A **camera**
+3. A **renderer**
+4. A **mesh** to render
+  * _A **light** if any material uses Phong or Lambert shading_
+
+Here is the full source code for this demo.  The remaining documentation will
+walk the reader through line by line explaining what each statement does.
+
+    class Demo extends Slogo
+      to constructor
+        parent.call(@)
+        let @counter = 0
+        @initLight()
+        @initShapes()
+      end
+
+      to initLight
+        let light = new THREE.PointLight(0xFFFFFF)
+        @scene.addLight(light)
+      end
+
+      to initShapes
+        [1..100].forEach(@bind('initShape'))
+      end
+
+      to initShape
+        let
+          shape = new THREE.Mesh(
+            new THREE.Sphere(1, 20, 20),
+            [
+              new THREE.MeshPhongMaterial({color: randomInt(0xffffff)})
+            ]
+          ),
+          shape.position = {
+            x: random() * 20 - 10,
+            y: random() * 20 - 10,
+            z: random() * 20 - 10
+          }
+        @scene.addObject(shape)
+      end
+
+      to animate
+        set
+          @camera.position.z = 20 * sin(@counter * 0.01),
+          @camera.position.x = 20 * cos(@counter * 0.01)
+        parent.call(@)
+        set @counter += 1
+      end
+    end
+
+    let demo = new Demo()
+    demo.animate()
+
+## Class Declaration
+
+    class Demo extends Slogo
+
+We begin by extending the [`Slogo` class](https://github.com/hansineffect/Slogo/blob/gh-pages/public/scripts/slogo.js).
+
+## Class Constructor
+
+    to constructor
+      parent.call(@)
+      let @counter = 0
+      @initLight()
+      @initShapes()
+    end
+
+In the `Demo` constructor we first make a call to the `Slogo` constructor
+procedure (this defines the **scene**, **camera**, and **renderer** objects).
+
+Then the `@counter` class variable is set to zero.
+
+Calls are then made to the `initLight` and `initShapes` procedures which
+position the **light** source and **meshes** used in this simulation.
+
+## Class Procedure `initLight`
+
+    to initLight
+      let light = new THREE.PointLight(0xFFFFFF)
+      @scene.addLight(light)
+    end
+
+In this procedure a point **light** source (white in color) is added to the **scene**.
+
+## Class Procedure `initShapes`
+
+    to initShapes
+      [1..100].forEach(@bind('initShape'))
+    end
+
+Slogo uses a data type called an array comprehension for iterations.
+
+In this procedure the `initShape` procedure is called 100 times.
+
+## Class Procedure `initShape`
+
+    to initShape
+      let
+        shape = new THREE.Mesh(
+          new THREE.Sphere(1, 20, 20),
+          [
+            new THREE.MeshPhongMaterial({
+              color: randomInt(0xffffff)
+            })
+          ]
+        ),
+        shape.position = {
+          x: random() * 20 + 10,
+          y: random() * 20 + 10,
+          z: random() * 20 + 10
+        }
+      @scene.addObject(shape)
+    end
+
+The `initShape` procedure creates a new **mesh** with defined **geometry** and
+**materials**.
+
+The **geometry** is a sphere with a randomly colored Phong shaded solid as
+**materials**.
+
+The object is positioned at a random location then added to the **scene**.
+
+## Class Procedure `animate`
+
+    to animate
+      set
+        @camera.position.z = 20 * sin(@counter * 1%),
+        @camera.position.x = 20 * cos(@counter * 1%)
+      parent.call(@)
+      set @counter += 1
+    end
+
+The `animate` procedure updates the **camera** position.
+
+The rotation is handled by the following equation.
+
+<p class="latex">
+  z_n = \si(n)0.01\\
+  x_n = \co(n)0.01
+</p>
+
+The `animate` procedure of the `Slogo` class is then called and the counter is
+incremented by one.
+
+## Animation
+
+    let demo = new Demo()
+    demo.animate()
+
+Lastly an instance of the `Demo` class is created.  A call is made to the
+`animate` procedure which starts the animation loop.
+
+## Review
+
+In this demonstration we extended the Slogo class which defines the **scene**,
+**camera**, and **renderer** objects.
+
+One hundred shapes meshes were created with a sphere for **geometry** and a 
+Phong shaded solid for **materials**.
+
+Finally, we rendered the **mesh** objects in our **scene** using the `animate`
+procedure of the `Slogo` class.
+
+## Next Lesson
+
+Demo #5: [Textures](./demo04.html)
+<br>
+<br>
+<br>
+
+</textarea>
+      </section>
+
+      <footer class="ui-widget-header ui-corner-all">
+        <div id="theme">
+          <label for="themeChanger">Theme:</label>
+          <select id="themeChanger">
+          </select>
+        </div>
+        <div id="copyright">
+          <a href="hansoksendahl.com">Hans Oksendahl</a>
+          , 2011.
+          <a href="https://github.com/hansineffect/Slogo/blob/master/COPYING">MIT User License</a>
+        </div>
+        <br class="clear">
+      </footer>
+
+    </section>
+
+    <div id="modal" class="dialog" title="Parsed Output" style="display:none;height:0"></div>
+
+    <!-- We're going jQuery this round -->
+
+    <!-- Include jQuery & jQuery UI -->
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.js"></script>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.13/jquery-ui.min.js"></script>
+
+    <!-- Include our scripts and plugins -->
+
+    <!-- Jeremy Hynds "create" event for jQuery -->
+    <script type="text/javascript" src="./public/scripts/jquery-create-event.js"></script>
+
+    <!-- The JSS Plugin ...Winning! -->
+    <script type="text/javascript" src="./public/scripts/jquery-jss.js"></script>
+
+    <!-- Our app script -->
+    <script type="text/javascript" src="./public/scripts/app.js"></script>
+
+    <!-- Showdown the Markdown library for Javascript -->
+    <script type="text/javascript" src="https://github.com/coreyti/showdown/raw/master/src/showdown.js"></script>
+
+    <!-- Our parser -->
+    <script type="text/javascript" src="./public/scripts/grammar.js"></script>
+
+    <!-- Three.js -->
+    <script type="text/javascript" src="http://mrdoob.github.com/three.js/build/Three.js"></script>
+
+    <!-- JsBeautify -->
+    <script type="text/javascript" src="https://github.com/einars/js-beautify/raw/master/beautify.js"></script>
+
+    <!-- Slogo -->
+    <script type="text/javascript" src="./public/scripts/slogo.js"></script>
+    
+  </body>
+</html> 
+S

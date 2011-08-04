@@ -1,0 +1,394 @@
+<!-- Markup generators make you so damn lazy -->
+
+<!-- Writing all of this markup was like running a marathon for me. -Hans -->
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Slogo</title>
+    <link type="text/css" href="./public/styles/import.css" rel="stylesheet">
+    <link type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.11/themes/base/jquery-ui.css" rel="stylesheet">
+  </head>
+
+  <body>
+    <section id="app">
+      <header class="tabs">
+        <ul>
+          <li><a href="#tabs-1">Live Demo</a></li>
+          <li><a href="#tabs-2">Documentation</a></li>
+        </ul>
+      </header>
+
+      <section id="tabs-1">
+        <section id="controls">
+          <div class="buttons" style="position:absolute;">
+            <button id="run">Run!</button>
+            <button id="source" style="display: none">Parsed Output</button>
+          </div>
+          <textarea id="sourceCode" data-autoRun="true">
+# Adapted from the Three.js Equirectangular panorama demo.
+class Demo extends Slogo
+  to constructor
+    parent.call(@)
+    let
+      @lon = 0,
+      @lat = 0
+    @initShape()
+  end
+
+  to initShape
+    let
+      shape = new THREE.Mesh(
+        new THREE.SphereGeometry(20, 60, 40),
+        new THREE.MeshBasicMaterial({
+          map: THREE.ImageUtils.loadTexture(
+            './public/images/360skybox.jpg'
+          )
+        })
+      ),
+      shape.scale.x = -1
+    @scene.addObject(shape)
+  end
+
+  to mouseDown |event|
+    let
+      @active  = yes,
+      @downX   = event.clientX,
+      @downY   = event.clientY,
+      @downLon = @lon,
+      @downLat = @lat
+  end
+
+  to mouseUp
+    let @active = no
+  end
+
+  to mouseMove |event|
+    if @active then
+      let
+        @lon = (@downX - event.clientX) * 20% + @downLon,
+        @lat = (event.clientY - @downY) * 20% + @downLat
+    end
+  end
+
+  to animate
+    let
+      @lat = max(-85, min(85, @lat)),
+      phi = (90 - @lat) * PI / 180,
+      theta = @lon * PI / 180,
+      @camera.target.position = {
+        x: 20 * sin(phi) * cos(theta),      
+        y: 20 * cos(phi),
+        z: 20 * sin(phi) * sin(theta)
+      }
+    parent.call(@)
+  end
+end
+
+let demo = new Demo()
+$(demo.container).mousedown(
+  demo.bind('mouseDown')
+).mouseup(
+  demo.bind('mouseUp')
+).mousemove(
+  demo.bind('mouseMove')
+)
+demo.animate()
+</textarea>
+        </section>
+
+        <div id="universe">
+        </div>
+
+        <br class="clear">
+        
+      </section>
+
+      <section id="tabs-2">
+        <textarea id="projectDocsEdit">
+_Previous - [Lighting](./demo03.html) | Next - [Write some code!](./app.html)_
+# Textures
+
+![Slogo the slug](./public/images/Slogo.png "Slogo the slug") This demonstration provides an example of mapping a texture using the [Three.js](https://github.com/mrdoob/three.js/)
+library.  The texture is displayed using a method called [map projection](http://en.wikipedia.org/wiki/Map_projection).
+
+    class Demo extends Slogo
+      to constructor
+        parent.call(@)
+        let
+          @lon = 0,
+          @lat = 0
+        @initShape()
+      end
+
+      to initShape
+        let
+          shape = new THREE.Mesh(
+            new THREE.Sphere(20, 60, 40),
+            new THREE.MeshBasicMaterial({
+              map: THREE.ImageUtils.loadTexture(
+                './public/images/360skybox.jpg'
+              )
+            })
+          ),
+          shape.scale.x = -1
+        @scene.addObject(shape)
+      end
+
+      to mouseDown |event|
+        let
+          @active  = yes,
+          @downX   = event.clientX,
+          @downY   = event.clientY,
+          @downLon = @lon,
+          @downLat = @lat
+      end
+
+      to mouseUp
+        let @active = no
+      end
+
+      to mouseMove |event|
+        if @active then
+          let
+            @lon = (@downX - event.clientX) * 20% + @downLon,
+            @lat = (event.clientY - @downY) * 20% + @downLat
+        end
+      end
+
+      to animate
+        let
+          @lat = max(-85, min(85, @lat)),
+          phi = (90 - @lat) * PI / 180,
+          theta = @lon * PI / 180,
+          @camera.target.position = {
+            x: 20 * sin(phi) * cos(theta),      
+            y: 20 * cos(phi),
+            z: 20 * sin(phi) * sin(theta)
+          }
+        parent.call(@)
+      end
+    end
+
+    let demo = new Demo()
+    $(demo.container).mousedown(
+      demo.bind('mouseDown')
+    ).mouseup(
+      demo.bind('mouseUp')
+    ).mousemove(
+      demo.bind('mouseMove')
+    )
+    demo.animate()
+
+## Class Declaration
+
+    class Demo extends Slogo
+
+We begin by extending the [`Slogo` class](https://github.com/hansineffect/Slogo/blob/gh-pages/public/scripts/slogo.js).
+
+## Class Constructor
+
+    to constructor
+      parent.call(@)
+      let
+        @lon = 0,
+        @lat = 0
+      @initShape()
+    end
+
+The `Demo` consturctor first makes a call to the constructor of the `Slogo` class
+(this defines the **scene**, **camera**, and **renderer** objects).
+
+Then class variables for latitude and longitude are initialized and set to zero.
+
+Finally the constructor makes a call to `initShape` which adds a shape to the
+**scene**.
+
+## Class Procedure `initShape`
+
+    to initShape
+      let
+        shape = new THREE.Mesh(
+          new THREE.Sphere(20, 60, 40),
+          new THREE.MeshBasicMaterial({
+            map: THREE.ImageUtils.loadTexture(
+              './public/images/360skybox.jpg'
+            )
+          })
+        ),
+        shape.scale.x = -1
+      @scene.addObject(shape)
+    end
+
+The `initShape` procedure creates a sphere with a paroramic image mapped to its
+surface.
+
+First a **mesh** is created with a sphere for **geometry** and a paromaic
+texture for **materials**
+
+Three.js renders the texture on the outside of the sphere by default.  Since the
+**camera** will be on the inside of the sphere we need to adjust the scale factor
+on one of the axes by a multiple of -1.  This makes Three.js map the texture on
+the inside of the sphere.
+
+Finally we add the sphere to the **scene**.
+
+## Class Procedure `mouseDown`
+
+    to mouseDown
+      let
+        @active  = yes,
+        @downX   = event.clientX,
+        @downY   = event.clientY,
+        @downLon = @lon,
+        @downLat = @lat
+    end
+
+The `mouseDown` procedure makes use of the `mousedown` browser event.
+
+Here we track several different variables used in the `mouseMove` class procedure.
+First we set the `@active` class variable letting the `mouseMove` event know that
+the user is currently interacting. We also track the current `x` and `y` when
+the user clicks the mouse as well as the current latitude and longitude.
+
+## Class Procedure `mouseUp`
+
+    to mouseUp
+      let @active = no
+    end
+
+The `mouseUp` procedure disables the `@active` class variable letting the
+`mouseMove` event know that the user is no longer interacting.
+
+## Class Procedure `mouseMove`
+
+    to mouseMove |event|
+      if @active then
+        let
+          @lon = (@downX - event.clientX) * 20% + @downLon,
+          @lat = (event.clientY - @downY) * 20% + @downLat
+      end
+    end
+
+The `mouseMove` procedure makes a check to see if `@active` class variable is enabled.
+It then uses the class variables set in `mouseDown` to record the current latitude
+and longitude for use in the `animate` procedure.
+
+## Class Procedure `animate`
+
+    to animate
+      let
+        @lat = max(-85, min(85, @lat)),
+        phi = (90 - @lat) * PI / 180,
+        theta = @lon * PI / 180,
+        @camera.target.position = {
+          x: 20 * sin(phi) * cos(theta),      
+          y: 20 * cos(phi),
+          z: 20 * sin(phi) * sin(theta)
+        }
+      parent.call(@)
+    end
+
+The `animate` procedure aims the **camera** at the last latitude and longitude
+coordinates recorded by the `mouseMove` procedure.
+
+This procedure hooks into the animation loop of the `Slogo` class.
+
+## Animation
+
+    let demo = new Demo()
+    $(demo.container).mousedown(
+      demo.bind('mouseDown')
+    ).mouseup(
+      demo.bind('mouseUp')
+    ).mousemove(
+      demo.bind('mouseMove')
+    )
+    demo.animate()
+
+Now that we've defined the `Demo` class we can create a new instance.
+
+Next the `mousedown`, `mouseup`, and `mousemove` events are bound to the corresponding
+function in the `Demo` class.
+
+Finally a call is made to the `animate` procedure starting the animation loop.
+
+## Review
+
+In this demonstration we extended the Slogo class which defines the **scene**,
+**camera**, and **renderer** objects.
+
+A shape was created with a sphere for **geometry** and an inverted texture for
+**materials**.
+
+We then bound the `mousedown`, `mouseup`, and `mousemove` browser events to the
+corresponding class procedures in our `Demo` class.
+
+Finally, we rendered the **mesh** in our **scene** using the `animate` procedure
+of the `Slogo` class.
+
+## More Lessons.
+
+This concludes the Slogo tutorials.  More will surely come at a later time.
+
+If you've been following along you may be ready to start writing 
+[your own Slogo programs](./app.html).  Have fun!
+<br>
+<br>
+<br>
+
+</textarea>
+      </section>
+
+      <footer class="ui-widget-header ui-corner-all">
+        <div id="theme">
+          <label for="themeChanger">Theme:</label>
+          <select id="themeChanger">
+          </select>
+        </div>
+        <div id="copyright">
+          <a href="hansoksendahl.com">Hans Oksendahl</a>
+          , 2011.
+          <a href="https://github.com/hansineffect/Slogo/blob/master/COPYING">MIT User License</a>
+        </div>
+        <br class="clear">
+      </footer>
+
+    </section>
+
+    <div id="modal" class="dialog" title="Parsed Output" style="display:none;height:0"></div>
+
+    <!-- We're going jQuery this round -->
+
+    <!-- Include jQuery & jQuery UI -->
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.js"></script>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.13/jquery-ui.min.js"></script>
+
+    <!-- Include our scripts and plugins -->
+
+    <!-- Jeremy Hynds "create" event for jQuery -->
+    <script type="text/javascript" src="./public/scripts/jquery-create-event.js"></script>
+
+    <!-- The JSS Plugin ...Winning! -->
+    <script type="text/javascript" src="./public/scripts/jquery-jss.js"></script>
+
+    <!-- Our app script -->
+    <script type="text/javascript" src="./public/scripts/app.js"></script>
+
+    <!-- Showdown the Markdown library for Javascript -->
+    <script type="text/javascript" src="https://github.com/coreyti/showdown/raw/master/src/showdown.js"></script>
+
+    <!-- Our parser -->
+    <script type="text/javascript" src="./public/scripts/grammar.js"></script>
+
+    <!-- Three.js -->
+    <script type="text/javascript" src="http://mrdoob.github.com/three.js/build/Three.js"></script>
+
+    <!-- JsBeautify -->
+    <script type="text/javascript" src="https://github.com/einars/js-beautify/raw/master/beautify.js"></script>
+
+    <!-- Slogo -->
+    <script type="text/javascript" src="./public/scripts/slogo.js"></script>
+    
+  </body>
+</html> 
+S
