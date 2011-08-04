@@ -72,7 +72,7 @@ br.clear {
 
 .ui-widget-content pre {
   display: block;
-  overflow: none;
+  overflow: hidden;
 }
 
 .ui-widget-content pre code {
