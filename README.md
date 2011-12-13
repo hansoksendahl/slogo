@@ -20,4 +20,4 @@ Slogo Links
 Prerequisites to get involved.
 
 To checkout the Slogo library and start writing your own Slogo programs you'll
-need Node.js.
+need Node.js. 
