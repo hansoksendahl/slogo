@@ -17,23 +17,23 @@ br.clear {
   clear: both;
 }
 
+h1, h2, h3, h4, h5, h6 {
+  /*color: rgb(50, 50, 50);*/
+/*  text-shadow: 0px 0px 3px rgb(0,0,0);
+  -moz-text-shadow: 0px 0px 3px rgb(0,0,0);
+  -opera-text-shadow: 0px 0px 3px rgb(0,0,0);
+  -webkit-text-shadow: 0px 0px 3px rgb(0,0,0);*/
+}
+
+h1, h2 {
+  border-bottom: 1px solid rgb(50, 50, 50);
+  padding-bottom: 0.3em;
+}
+
 #app {
   position: relative;
   width: 1000px;
-  height: 600px;
-}
-
-.toolbar {
-  position: relative;
-}
-
-#speed {
-  position: absolute;
-  width: 200px;
-}
-
-#commandLine {
-  display: block;
+  height: 580px;
 }
 
 #app footer {
@@ -46,19 +46,6 @@ br.clear {
   right: 0.2em;
 }
 
-#sourceCode,
-#projectDocsEdit {
-  background-color: rgb(0,0,0);
-  background-image: none;
-  color: rgb(0,230,0);
-  font-family: "Consolas", "Courier New", Courier, monospace;
-  font-weight: bold;
-  font-size: 1.2em;
-  width: 100%;
-  height: 510px;
-  text-shadow: 0px 0px 3px rgb(0,100,100);
-}
-
 #projectDocs {
   overflow: auto;
   padding: 0.5em;
@@ -66,8 +53,8 @@ br.clear {
   font-size: 1.4em;
 }
 
-.ui-widget-content code {
-  font-family: "Consolas", "Courier New", Courier, monospace;
+.ui-widget code {
+  font-family: "Consolas", "Courier New", Courier, monospace!important;
 }
 
 .ui-widget-content pre {
@@ -75,19 +62,34 @@ br.clear {
   overflow: hidden;
 }
 
+textarea,
 .ui-widget-content pre code {
-  margin: 1px;
+  font-family: "Consolas", "Courier New", Courier, monospace!important;
+  background-color: rgb(30,30,30);
   display: block;
-  background-color: rgb(0,0,0);
-  padding: 0.5em;
   color: rgb(0,230,0);
   font-weight: bold;
   text-shadow: 0px 0px 3px rgb(0,100,100);
 }
 
+textarea {
+  font-size: 1.2em!important;
+}
+
+.ui-widget-content pre code {
+  padding: 0.5em;
+  margin-left: 0.5em;
+  margin-right: 1em;
+}
+
 #sourceCode {
+  overflow: auto; 
+  overflow-y: auto; 
+  overflow-x: auto; 
+  overflow:-moz-scrollbars-vertical;
+  white-space: nowrap;
+  height: 100%;
   width: 100%;
-  height: 515px;
 }
 
 #theme {
@@ -98,12 +100,22 @@ br.clear {
   float: right;
 }
 
-#controls {
+#controls,
+#projectDocsEdit {
+  background-color: rgb(30,30,30);
   float: left;
-  height: 480px;
   margin-top: 1em;
-  width: 460px;
-  height: 100%;
+}
+
+#controls {
+  width: 480px;
+  height: 480px;
+}
+
+#projectDocsEdit {
+  font-size: 1.3em!important;
+  width: 100%;
+  height: 480px;
 }
 
 #universe {
@@ -117,4 +129,12 @@ br.clear {
 #world {
   height: 480px;
   width: 480px;
+}
+
+#run {
+  position: absolute;
+}
+
+#modal {
+  white-space: pre;
 }
