@@ -51,7 +51,7 @@ class Demo extends Slogo
 
   to move |event|
     set
-      @theta = 0.002 * (event.clientX),
+      @theta = 0.002 * (event.clientX),
       @phi   = 0.004 * (event.clientY - @halfY)
   end
 
@@ -62,7 +62,7 @@ class Demo extends Slogo
         y: @radius * sin(@phi),
         z: @radius * sin(@theta)
       }
-    @camera.lookAt({x: 0, y: 0, z: 0})
+  @camera.lookAt({x: 0, y: 0, z: 0})
     parent.call(@)
   end
 end
@@ -70,6 +70,7 @@ end
 let demo = new Demo()
 $(document).mousemove(demo.bind('move'))
 demo.animate()
+
 </textarea>
         </section>
 
