@@ -1,8 +1,26 @@
+
+/**
+ * Provides requestAnimationFrame in a cross browser way.
+ * @author greggman / http://greggman.com/
+ */
+if ( !window.requestAnimationFrame ) {
+  window.requestAnimationFrame = (function() {
+    return window.requestAnimationFrame ||
+    window.webkitRequestAnimationFrame ||
+    window.mozRequestAnimationFrame ||
+    window.oRequestAnimationFrame ||
+    window.msRequestAnimationFrame ||
+    function( /* function FrameRequestCallback */ callback, /* DOMElement Element */ element ) {
+      window.setTimeout( callback, 1000 / 60 );
+    };
+  })();
+}
+
 // # App
 //
 // This is a closure which returns our App class.  The App class contains all
 // of the events logic and 
-var App = (function() {
+var App = (function($) {
 
   // ## Constructor function
   var app = function() {
@@ -15,8 +33,11 @@ var App = (function() {
       'overcast', 'pepper-grinder', 'redmond',
       'smoothness', 'south-street', 'start',
       'sunny', 'swanky-purse', 'trontastic',
-      'ui-darkness', 'ui-lightness', 'vader'
+      'ui-darkness', 'ui-lightness'
     ];
+
+    // The number of controls we have in the app.
+    this.controls = 0;
 
     // We use cookies to track which theme and which tab are currently open.
     this.currentTheme = readCookie('theme') || 'smoothness';
@@ -44,27 +65,27 @@ var App = (function() {
       }
     };
 
+    this.dialogOptions = {
+      'modalBox': {
+        'autoOpen': false
+      }
+    };
+
     // We make use of the jQuery UI position function quite a bit in this
     // interface.  The following are the elements that are dynamically
     // positioned (organized by id).
     this.positions = {
-      '#speed': {
-        'my': 'left center',
-        'at': 'right center',
-        'of': '#newControl',
-        'offset': '13 0'
+      '#run': {
+        'my': 'right top',
+        'at': 'right top',
+        'of': '#controls',
+        'offset': '-15 15'
       },
-      '#updateOn': {
-        'my': 'left center',
-        'at': 'right center',
-        'of': '#speed',
-        'offset': '13 0'
-      },
-      '#settings': {
-        'my': 'left center',
-        'at': 'right center',
-        'of': '#updateOn',
-        'offset': '3 0'
+      '#source': {
+        'my': 'right top',
+        'at': 'right top',
+        'of': '#controls',
+        'offset': '-15, 45'
       }
     };
 
@@ -90,24 +111,36 @@ var App = (function() {
     //
     // Example: `$(evt.target);`
     var jss = {
-      '@create':                                 this.bind('tabs'),
-      '@resize':                                 this.bind('resize'),
-      '@tabsselect':                             this.changeTab,
       'button':                                  this.bind('buttons'),
       '.buttonset':                              function() { $(this).buttonset(); },
-      '.toolbar #speed':                         this.bind('speedSlider'),
       '#themeChanger':                           this.bind('themeList'),
       '#themeChanger@change':                    this.bind('changeTheme'),
       '#projectDocsEdit@blur':                   this.bind('markup'),
-      '#projectDocs@click':                      this.editDocs,
+      '#sourceCode':                             this.whiteSpaceHack,
+      '#sourceCode@keydown':                     this.hideSourceButton,
+      // '#projectDocs@click':                      this.editDocs,
       '#projectDocs a@click':                    this.goToUrlNoEdit,
       '#projectDocs .latex':                     this.latex,
+      'pre code':                                this.makePretty,
+      '#run@click':                              this.bind('parse'),
+      '#source@click':                           this.bind('showParsed')
     };
+
+    if($('#sourceCode').data('autoRun')) {
+      $('#run').each(this.bind('parse'));
+    }
 
     this.markup({'target': $('#projectDocsEdit')});
 
     // apply our JSS rules to the #app id
     this.app.jss(jss);
+
+    this.app.tabs({
+      'show': this.bind('jostle'),
+      'selected': this.tabIndex
+    });
+
+    this.app.bind('tabsselect', this.bind('changeTab'));
   };
 
   // The prototype for our App "class"
@@ -120,17 +153,24 @@ var App = (function() {
       }
     },
 
-    'changeTab': function(evt, ui) {
-      this.tabIndex = ui.index
-      createCookie('selectedTab', this.tabIndex, this.cookieExpiration);
+    'whiteSpaceHack': function() {
+      var
+        self = $(this),
+        html = self.html(),
+        mod = html.replace(/ /g, '\u00A0').replace(/&lt;/g, '<');
+      self.html(document.createTextNode(mod));
     },
 
-    // Converts the #app element to a jQuery UI tabs element
-    'tabs': function() {
-      this.app.tabs({
-        'show': this.bind('jostle'),
-        'selected': this.tabIndex
-      });
+    // Jostle these elements to fit in the right place
+    'jostle': function() {
+      for(var key in this.positions) {
+        $(key).position(this.positions[key]);
+      }
+    },
+
+    'changeTab': function(evt, ui) {
+      this.tabIndex = ui.index
+      createCookie('selectedTab', this.tabIndex, this.cookieExpiration, window.location.pathname);
     },
 
     'resize': function() {
@@ -144,13 +184,11 @@ var App = (function() {
         collision: 'none'
       });
       this.jostle();
+      $('.latex').each(this.latex);
     },
 
-    // Jostle these elements to fit in the right place
-    'jostle': function() {
-      for(var key in this.positions) {
-        $(key).position(this.positions[key]);
-      }
+    'hideSourceButton': function() {
+      $('#source').css({'display': 'none'});
     },
 
     // Turn button elements into jQuery UI buttons
@@ -161,9 +199,29 @@ var App = (function() {
       self.button(this.buttonOptions[id]);
     },
 
-    // Create the slider that we use for speed adjustments
-    'speedSlider': function(i, ele) {
-      $(ele).slider({value: 50});
+    'makePretty': function() {
+      $(this).addClass('ui-widget').addClass('ui-corner-all');
+    },
+
+    'parse': function(i, ele) {
+      $('#universe').html('');
+      var
+        source = $('#sourceCode').val(),
+        code;
+      try {
+        code = parser.parse(source.replace(/\u00A0/g, ' '));
+        $('#modal').html(js_beautify(code));
+        eval(code);
+        $('#source').css({'display': 'block'});
+        this.jostle();
+      }
+      catch(err) {
+        alert(err);
+      }
+    },
+
+    'showParsed': function() {
+      $('#modal').dialog('open');
     },
 
     // Search through the stylesheets we've already loaded attempting to enable
@@ -186,7 +244,7 @@ var App = (function() {
       if (! this.enableLoadedTheme()) {
         var
           e = $('<link rel="stylesheet" type="text/css">'),
-          url =  'http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.11/themes/'+title+'/jquery-ui.css';
+          url =  'http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.13/themes/'+title+'/jquery-ui.css';
         e.attr({'href': url, 'id': this.currentTheme});
         e.appendTo('head');
       }
@@ -227,7 +285,7 @@ var App = (function() {
         self = $(evt.target),
         md   = self.val();
         html = this.markdown.makeHtml(md),
-        e    = $('<div id="projectDocs" class="ui-widget-content ui-corner-all">');
+        e    = $('<div id="projectDocs" class="ui-widget-content ui-corner-all"></div>');
       e.html(html);
       e.data('md', md);
       self.replaceWith(e);
@@ -241,7 +299,7 @@ var App = (function() {
       var
         self = $(this),
         md   = self.data('md'),
-        e    = $('<textarea id="projectDocsEdit" class="ui-widget ui-corner-all">');
+        e    = $('<textarea id="projectDocsEdit" class="ui-widget ui-corner-all"></textarea>');
       e.text(md);
       self.replaceWith(e);
       e[0].focus();
@@ -249,6 +307,7 @@ var App = (function() {
 
     'goToUrlNoEdit': function(evt) {
       window.location = $(evt.target).attr('href');
+      return false;
     },
 
     // This is a clever hack from the internet.  It replaces any element with
@@ -257,28 +316,31 @@ var App = (function() {
       var
         self = $(this),
         textColor = rgbToHex($('.ui-widget-content').css('color')),
-        img   = $('<img>').attr({
-          'src': "http://chart.apis.google.com/chart?chco="+textColor+"&chf=bg,s,00000000&cht=tx&chl=" + encodeURIComponent(self.text()),
-          'alt': 'A LaTeX equation'
+        name = self.attr('class'),
+        equation  = (self[0].nodeName == 'IMG') ? self.data('equation') : encodeURIComponent(self.html()),
+        img       = $('<img>').attr({
+          'src':           "http://chart.apis.google.com/chart?chco="+textColor+"&chf=bg,s,00000000&cht=tx&chl=" + equation,
+          'class':         name,
+          'alt':           'A LaTeX equation',
+          'data-equation': equation
         });
       self.replaceWith(img);
     }
   };
 
-
-
   // ## Cookies
   //
   // Cookie functions borrowed from
   // [quirksmode.org](http://www.quirksmode.org/js/cookies.html)
-  var createCookie = function(name, value, days) {
+  var createCookie = function(name, value, days, path) {
+    path = path || '/'
     if (days) {
       var date = new Date();
       date.setTime(date.getTime()+(days*24*60*60*1000));
       var expires = "; expires="+date.toGMTString();
     }
     else var expires = "";
-    document.cookie = name+"="+value+expires+"; path=/";
+    document.cookie = name+"="+value+expires+"; path="+path;
   };
 
   var readCookie = function(name) {
@@ -297,18 +359,29 @@ var App = (function() {
   };
 
   function hex(x) {
-      return ("0" + parseInt(x).toString(16)).slice(-2);
+    return ("0" + parseInt(x).toString(16)).slice(-2);
   }
 
   function rgbToHex(rgb) {
-      rgb = rgb.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/);
-      return hex(rgb[1]) + hex(rgb[2]) + hex(rgb[3]);
+    rgb = rgb.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/);
+    return hex(rgb[1]) + hex(rgb[2]) + hex(rgb[3]);
   }
 
   return app;
-}());
+}(jQuery));
 
-$(document).ready(function() {
+$.noConflict();
+
+jQuery(document).ready(function($) {
+  // This is going to take some debugging I have no idea why I can't declare
+  // this after my jss call.
+  $('#modal').dialog({
+    autoOpen: false,
+    modal: true,
+    width: 800,
+    height: 600
+  });
+
   var app = new App();
 
   app.resize();
@@ -319,5 +392,6 @@ $(document).ready(function() {
       var self = $(this);
       self.addClass('ui-widget');
     },
-  })
+  });
+
 });

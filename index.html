@@ -1,3 +1,4 @@
+
 <!-- Markup generators make you so damn lazy -->
 
 <!-- Writing all of this markup was like running a marathon for me. -Hans -->
@@ -12,31 +13,47 @@
   <body>
     <img id="logo" src="./public/images/logo.png" style="display:block; margin:0 auto;">
 
-    <section id="docs" style="width: 600px; margin: 0 auto; font-size: 1.4em">
+    <section id="docs" style="width: 800px; margin: 0 auto; font-size: 1.4em">
       <header class="tabs">
         <ul>
           <li><a href="#tabs-1">Introduction</a></li>
           <li><a href="#tabs-2">Abstract</a></li>
           <li><a href="#tabs-3">Syntax</a></li>
-          <li><a href="#tabs-4">License</a></li>
-          <li><a href="#tabs-5">Try It</a></li>
+          <li><a href="#tabs-4">Annotated Source</a></li>
+          <li><a href="#tabs-5">License</a></li>
+          <li><a href="#tabs-6">Try It</a></li>
         </ul>
       </header>
 
       <section id="tabs-1">
        <textarea class="markdown">
 # Slogo
-**Slogo** is a multi-agent programmable modelling environment for WebGL.  Slogo
-provides an <abbr title="Application Programming Interface">API</abbr> and 
-graphics framework for producing hardware-accelerated
-[turtle graphics](http://en.wikipedia.org/wiki/Turtle_graphics).
+**Slogo** is a formal grammar which compiles into Javascript.  It was designed
+to remove some of the conceptual hurdles from writing WebGL simulations.
 
 _Note: The specification is still under development (pre-alpha)._
+
+## Pre-Requisites
+
+Slogo requires a browser which includes the [WebGL specification](http://www.khronos.org/registry/webgl/specs/1.0/).
+
+It has been tested on the latest versions of [Google Chrome](http://www.google.com/chrome/), [Firefox](http://www.mozilla.com/en-US/firefox/new/), and [Safari](http://www.apple.com/safari/).
 
 ## Mascot
 
 Slogo the slug
 ![Slogo the slug](./public/images/Slogo.png "Slogo the slug")
+
+## Tutorials
+
+The tutorials walk the reader through using Slogo to develop 3D graphics
+with [Three.js](https://github.com/mrdoob/three.js/) (A 3D engine for Javascript).
+
+1. [Demo #1, Introduction to Slogo](./demo00.html)
+2. [Demo #2, Animation](./demo01.html)
+3. [Demo #3, Interactitvity](./demo02.html)
+4. [Demo #4, Lighting](./demo03.html)
+5. [Demo #5, Textures](./demo04.html)
         </textarea>
       </section>
 
@@ -52,7 +69,7 @@ Most notable of these libraries are:
 * [Jison](#jison) - a parser generator
 * [WebGL](#webgl) - a 3d graphics specification
 
-# Jison
+## Jison
 
 Slogo makes use of the [Jison](https://github.com/zaach/jison)
 Javascript library to simplify the process of defining a formal grammar.  Jison
@@ -69,143 +86,439 @@ Jison has modes to recognize languages described by the following grammars:
 It also has a special mode for generating
 [LL(1)](http://en.wikipedia.org/wiki/LL_parser) parse tables
 
-> ## Bison
+> ### Bison
 >
 > Jison is modeled after [Bison](http://www.gnu.org/software/bison/) a parser
 > generator for the C progamming language.  Bison is a parser generator that
 > converts an annotated context-free grammar into an LALR(1) or
 > [GLR](http://en.wikipedia.org/wiki/Glr_parser) parser for that grammar.
 
-# WebGL
+## WebGL
 
 [WebGL](http://en.wikipedia.org/wiki/WebGL) is a recently released specification
 for modern browsers.  It extends Javascript with the ability to generate 3D
 graphics.  WebGL enables the creation of hardware-accelerated graphics as it
 communicates directly to the <abbr title="Graphics Processing Unit">GPU</abbr>
 on the host computer.
-
-Slogo makes use of Jison's ability to share the scope of a grammar with other
-parts of Javascript via the [`yy` variable](http://zaach.github.com/jison/docs/#sharing-scope).
-When a Slogo program is parsed it makes direct calls to WebGL via the Slogo
-graphics framework.
         </textarea>
       </section>
 
       <section id="tabs-3">
         <textarea class="markdown">
-# Slogo Syntax
-Since Slogo compiles down to Javascript we borrow some functionality however the
-syntax is more like Lisp or Ruby.
+The Slogo formal grammar is built on and compiles into Javascript.  While Slogo retains some
+elements of Javascript the syntax differs in some places.
 
-* [Math constants and functions](#mathconstantsandfunctions)
-* [Bitwise Operations](#bitwiseoperators)
+If you have some familiarity with Logo, Ruby, or Javascript there are some [tutorials](#tutorials) to get you started.
 
-## Math constants and functions
-The [Mozilla Developer Network documentation](https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Math)
-for Javascript's Math object is worth looking up because we retain many of
-Javascript's math constants and functions.
+# Documentation
 
-In regards to math the syntax of Slogo differs from Javascript in a
-number of ways.  Namely one design consideration is that math functions are
-first class citizens in Slogo.  The idea is that we're here to do math primarily
-and develop code secondarily.
+## Table of Contents
 
-1. In Slogo every math constant and function is directly available in
-  the main namespace.
+* [Comments](#comments)
+* Data types
+  * [arrays](#arrays), [blocks](#blocks), [booleans](#booleans),
+    [nil](#nil), [numbers](#numbers), [objects](#objects),
+    [ranges](#ranges) [strings](#strings), [@](#metaobject)
+* [Variables](#variables)
+  * [let](#let), [set](#set)
+* [Equality Operators](#equalityoperators)
+* [Comparison Operators](#comparisonoperators)
+* [Logic Operators](#logicoperators)
+  * [and](#andoperator), [not](#unarynotoperator), [or](#oroperator)
+    [xor](#xoroperatorexclusiveor)
+* [Classes](#classes)
+  * [@variables](#classvariables), [parent statements](#parentstatements)
+* [Math](#math)
+  * [exponent operator](#exponentoperator), [factorial operator](#factorialoperator), [percentage operator](#percentageoperator),
+    [difference](#difference), [mean](#mean), [median](#median),
+    [mode](#mode), [product](#product), [quotient](#quotient),
+    [range](#range), [randomInt](#randomint), [sum](#sum),
 
-        PI # returns 3.141592653589793
+## Comments
 
-   &nbsp;
+Any line which begins with a **number sign** is a comment.
 
-        max 2, 5, 3 # returns 5
+    # Comments don't get run they just provide documentation
+    alert('OMG!')
 
-2. Exponents have their own operator, the `^` operator
+## Arrays
 
-        3 ^ 2 # returns 9
+An array is a list containing any data type surrounded by **square brackets** and seperated by **commas**.
 
-3. Factorials have their own operator, the `!` operator
+    [1, 2, 3, 4]
 
-        4! # returns 4 * 3 * 2 * 1
+&nbsp;
 
-4. The percent sign is used for percentages.
-
-        50% # returns 0.50
-
-5. The [`modulus`](http://en.wikipedia.org/wiki/Modulo_operation) operator is 
-    still an operator but it has a longer name
-
-        3 mod 2 # returns 1
-
-## Bitwise operators
-We have four bitwise operators in Slogo.  Bitwise operators allow for the
-comparison of boolean values.
-
-_Note: If you're familiar with how bitwise operations work in other languages
-feel free to skip to the next section._
-
-### And operator
-    true and true   # returns true
-    true and false  # returns false
-    false and false # returns false
-    false and true  # returns false
-
-### Or operator
-    true or true   # returns true
-    true or false  # returns true
-    false or false # returns false
-    false or true  # returns true
-
-### Xor operator (exclusive or)
-    true xor true   # returns false
-    true xor false  # returns true
-    false xor false # returns false
-    false xor true  # returns true
-
-### Not operator
-    true not true   # returns true
-    true not false  # returns false
-    false not false # returns false
-    false not true  # returns true
+    ['wetsuit', 'sunscreen', 'surfboard']
 
 ## Blocks
 
-Blocks also known as functions exist in several different forms in Slogo we
-eschew the purely imperative approach of Javascript and provide some helpers for
-blocks.  Blocks return their last statement by default.
+A block is a way of grouping instructions in Slogo so you can pass them around
+your program.  Blocks are equivalent to Javascript functions.
 
-### Block Examples
+A block is opened with the **to** keyword and closed with the **end** keyword.
 
-    to add |a, b|
-      a + b
+    to sayHi
+      alert("Hi there!")
     end
 
-### Anonymous Blocks
+### Block Returns
 
-    to bind |func, scope|
-      to
-        func.apply(scope, arguments)
+You can make a block return a value whenever it is invoked.  Block returns are
+denoted by a **left arrow** followed by a value.
+
+    to baconDispenser
+      <- "bacon"
+    end
+
+### Block Arguments
+
+Block arguments are enclosed in **pipe** characters and separated by **commas**.
+
+    to add |a, b|
+      <- a + b
+    end
+
+## Booleans
+
+Boolean values are slightly extended from their Javascript equivalents with
+`yes` and `no` values in addition to `true` and `false`.
+
+    yes == true
+
+&nbsp;
+
+    no == false
+
+## Objects
+
+An object is a special kind of list enclosed in **curly braces**.
+
+You can think of on object as a dictionary that contains **keys** (words) and
+their associated **values** (definitions).
+
+    {"mustache": "Burt Reynolds", "nunchucks": "Chuck Norris"}
+
+## Nil
+
+Nil is a special value that doesn't actually have a value.
+
+Nil simply means **undefined** or that an expression doesn't return a value.
+
+    nil === undefined
+    nil === void(0)
+
+## Numbers
+
+Numbers are pretty straight forward.  Slogo supports both integers and floating-point numbers.
+
+### Integers
+    786
+
+### Floating-point numbers
+    0.7236067977499789
+
+## Ranges
+
+Ranges are arrays with numeric entries of a specified length.  Slogo handles
+iteration with ranges and the forEach operator.
+
+    [1..10].forEach(to |i| alert(i) end)
+
+### Inclusive Ranges
+
+Inclusive ranges are denoted by an array with two integers separated by
+**two periods**.
+
+    [1..5] == [1, 2, 3, 4, 5]
+
+Exclusive ranges are denoted by an array with two integers separated by **three
+periods**.
+
+    [1...5] == [1, 2, 3, 4]
+
+## Strings
+
+Strings are any kind of character surrounded by **quotes**.
+
+### Double quoted strings
+    "Hello world!"
+
+### Single quoted strings
+    'Good morning!'
+
+### String Interpolation
+
+Double quoted strings support Ruby style string interpolation.
+
+    let greeting = "Hello"
+    alert("#{greeting} World!")
+
+## Meta Object
+
+The **at** symbol refers to whatever scope a statement is currently executing
+in.  It translates to the `this` keyword in Javascript.
+
+    to person |name|
+      set(@name, name)
+      <- @
+    end
+
+    person('Bob') # returns {name: 'Bob'}
+
+## Variables
+
+Variables are named containers for values that we want to use later.  Slogo uses
+the keywords **let** and **set** to define variables.
+
+### Let
+
+When you want to define a new variable it's best to use `let`.  Let defines a
+new scope and assigns a variable to it.
+
+    let animalSound = "MoOOOo"
+
+### Set
+
+The keyword `set` is used to change the value of variables which **already exist**.
+
+    set animalSound = 'Oink Oink'
+
+## Equality Operators
+
+Equality operators compare one expression to another returning either
+`yes` (true) or `no` (false).
+
+### Equivalent
+
+    1 + 1 == 2
+
+### Not Equivalent
+
+    2 + 2 != 5
+
+### Equivalent and Same Type
+
+    'test' === ['t', 'e', 's', 't'].join('')
+
+### Not Equivalent and Same Type
+
+    'test' !== ['t', 'e', 's', 't']
+
+## Comparison Operators
+
+Comparison operators compare one mathematical expression to another returning
+either `yes` (true) or `no` (false).
+
+### Less Than
+
+    1 < 2 == yes
+
+### Greater Than
+
+    42 > 5 == yes
+
+### Less Than or Equal To
+
+    ( 10 <= 5 + 5 ) == yes
+
+### Greater Than or Equal To
+
+    ( 5 >= 2 + 3 ) == yes
+
+## Logic Operators
+We have four logical operators in Slogo.  Logic operators work on any expression
+that returns **yes**, **no**, **nil**, **0**, or **1**
+
+### And operator
+    yes and yes # returns yes
+    1 and 1     # returns 1
+
+### Unary Not operator
+    not yes # returns no
+
+### Or operator
+    yes or no   # returns yes
+    1 or 0      # returns 1
+
+### Xor operator (exclusive or)
+    yes xor yes # returns no
+    1 xor 1 # returns 0
+
+## Classes
+
+Slogo provides support for some basic [object-oriented programming](http://en.wikipedia.org/wiki/Object-oriented_programming).
+Slogo extends Javascript's prototyping with the ability to define classes.
+
+    class Example
+      to constructor
+        # do some stuff
       end
     end
 
-### Closures
+### Class Variables
 
-Closures build on the idea of blocks.  Using closures we can bind the scope of a
-function to a particular object
+Class variables are variable names prefixed with an **at** symbol.
 
-    to run
-      @motivation
+    set @favoriteFood = 'Sushi'
+
+### Class Inheritance
+
+Slogo provides support for class inheritance through the **extends** keyword.
+
+    class Consciousness
+      to think
+        let thought = @thoughts[randomInt(@thoughts.length)]
+        alert("I'm thinking about #{thought}.")
+      end
     end
 
-    more = {
-      motivation: 'Yes!'
-    }
+    class Student extends Consciousness
+      to constructor
+        set(@thoughts, ['homework', 'ennui', 'the weekend'])
+      end
+    end
 
-    do run(more) # returns 'Yes!'
+
+### Parent Statements
+
+When a class is extended the **parent** keyword refers to the same-named
+procedure of an ancestor class.
+
+    class Truck
+      to constructor |name|
+        set @name = 'Truck'
+      end
+    end
+
+    class AwesomeTruck extends Truck
+      to constructor
+        parent.call(@)
+        set @name = "Awesome #{@name}"
+      end
+    end
+
+## Math
+
+One of the ideals behind Slogo is that math functions should be first class
+citizens.  Most of the math functions and constants normally available in
+Javascript's `Math` object are available in Slogo as a keyword.
+
+    PI # returns 3.141592653589793
+    ceil(9.5) # returns 10
+
+* Constants
+  * E, LN2, LN10, LOG2E, LOG10E, PI, SQRT1_2, SQRT2
+* Functions
+  * Trigonometry
+     * acos, asin, atan, atan2, cos, sin, tan
+  * Logarithms
+     * exp, log
+  * General
+     * abs, ceil, floor, max, min, random, round, sqrt
+
+Slogo also provides some extended math functions which can be included in the
+preamble section of any program output.  These functions are detailed below.
+
+## Exponent Operator
+
+The exponent operator replaces the `pow` function.
+
+    5 ^ 2 == 25
+
+## Factorial Operator
+
+The factorial operator will work on any expression which returns an **integer**.
+
+    5! == 120
+
+## Percentage Operator
+
+The percent operator turns a numeric value into a pencentage.
+
+    80% == 0.8
+
+## Difference
+
+Returns the difference between several subsequent subtract operations.
+
+    difference(10, 3, 2) == 5
+
+## Mean
+
+Returns the mean of several numeric values.
+
+    mean(2, 10) == 6
+
+## Median
+
+Returns the median of several numeric values.
+
+    median(5, 1, 7) == 5
+
+## Mode
+
+Returns the mode of several numeric values.
+
+    mode(2, 10, 4, 2) == 2
+
+## Product
+
+Returns the product of several successive multiply operations.
+
+    product(2, 5, 5) == 50
+
+## Quotient
+
+Returns the quotient of several successive divide operations.
+
+    quotient(100, 2, 5) == 10
+
+## Range
+
+Returns the range of several numeric values.
+
+    range(10, 5, 3, 2) == 8
+
+## RandomInt
+
+Returns a random integer between a value and zero.
+
+    ( randomInt(10) <= 10 ) == yes
+    ( randomInt(-5) >= -5 ) == yes
+<br>
+<br>
 
         </textarea>
       </section>
 
       <section id="tabs-4">
+        <textarea class="markdown">
+# Annotated Source
+
+Compiling is a three-stage process in Slogo.  The compiler consists of  **parser**,
+**scanner**, and **generator** modules.  These components work together to convert
+a Slogo program into a Javascript program.
+
+### Components
+
+* Scanner - scans the input stream, and returns a stream of tokens
+* Parser - searches for named groups in the tokens, returning nodes in the syntax tree
+* Generator - climbs the syntax tree, generating Javascript output
+  * Syntax Table - keeps track of any state specific information
+  * Preamble - extended functions to include in the generator output
+
+# Files
+
+* [grammar.js](http://hansineffect.github.com/Slogo/docs/grammar.html) - contains the **scanner** and **parser** modules
+  * [helpers.js](http://hansineffect.github.com/Slogo/docs/helpers.html) - contains functions for defining scanning rules and <abbr title="Backus-Naur Form">BNF</abbr> productions
+* [scope.js](http://hansineffect.github.com/Slogo/docs/scope.html) - contains the **generator** module and syntax table
+  * [preamble.js](http://hansineffect.github.com/Slogo/docs/preamble.html) - contains functions which extend Javascript
+
+        </textarea>
+      </section>
+
+      <section id="tabs-5">
         <textarea class="markdown">
 
 # License agreement
@@ -226,8 +539,6 @@ license is the most permissive license out there.
 > 
 > The above copyright notice and this permission notice shall be
 > included in all copies or substantial portions of the Software.
->
-> You must not take yourself too seriously.
 > 
 > THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
 > EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
@@ -240,7 +551,7 @@ license is the most permissive license out there.
         </textarea>
       </section>
 
-      <section id="tabs-5">
+      <section id="tabs-6">
         <textarea class="markdown">
 # Try Slogo Online
 The Slogo project includes a browser based <abbr title="Integrated Development Environment">IDE</abbr>
