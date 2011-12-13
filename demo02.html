@@ -25,57 +25,51 @@
             <button id="source" style="display: none">Parsed Output</button>
           </div>
           <textarea id="sourceCode" data-autoRun="true">
-class Demo extends Slogo
-  to constructor
-    parent.call(@)
-    set
-      @radius = 2,
-      @theta  = nil,
-      @phi    = nil,
-      @halfX  = @container.offsetWidth * 0.5,
-      @halfY  = @container.offsetHeight * 0.5,
-      @camera.position = {x: 0, y: 0, z: 2}
-    @initShape()
-  end
+class Demo extends Slogo
+  to constructor
+    parent.call(@)
+    set
+      @radius = 2,
+      @theta  = nil,
+      @phi    = nil,
+      @halfX  = @container.offsetWidth * 0.5,
+      @halfY  = @container.offsetHeight * 0.5,
+      @camera.position = {x: 0, y: 0, z: 2}
+    @initShape()
+  end
 
-  to initShape
-    let shape = new THREE.Mesh(
-      new THREE.CubeGeometry(1, 1, 1),
-      [
-        new THREE.MeshBasicMaterial({
-          color: randomInt(0xffffff),
-          opacity: 80%
-        }),
-        new THREE.MeshBasicMaterial({
-          color: randomInt(0xffffff),
-          wireframe: true
-        })
-      ]
-    )
-    @scene.addObject(shape)
-  end
+  to initShape
+    let shape = new THREE.Mesh(
+      new THREE.CubeGeometry(1, 1, 1),
+      new THREE.MeshBasicMaterial({
+        color: randomInt(0xffffff),
+        wireframe: true
+      })
+    )
+    @scene.addObject(shape)
+  end
 
-  to move |event|
-    set
-      @theta = 0.002 * (event.clientX - @halfX),
-      @phi   = 0.002 * (event.clientY - @halfY)
-  end
+  to move |event|
+    set
+      @theta = 0.002 * (event.clientX),
+      @phi   = 0.004 * (event.clientY - @halfY)
+  end
 
-  to animate
-    set
-      @camera.position = {
-        x: @radius * cos(@theta),
-        y: @radius * sin(@phi),
-        z: @radius * sin(@theta)
-      }
-    parent.call(@)
-  end
+  to animate
+    set
+      @camera.position = {
+        x: @radius * cos(@theta),
+        y: @radius * sin(@phi),
+        z: @radius * sin(@theta)
+      }
+    @camera.lookAt({x: 0, y: 0, z: 0})
+    parent.call(@)
+  end
 end
 
-let demo = new Demo()
+let demo = new Demo()
 $(document).mousemove(demo.bind('move'))
 demo.animate()
-
 </textarea>
         </section>
 

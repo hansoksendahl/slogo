@@ -28,21 +28,19 @@
 class Demo extends Slogo
   to constructor
     parent.call(@)
-    set @camera.position = {x: 0, y: 0, z: 2}
+    set @camera.position = {x: 0, y: 0, z: 3}
     @initShape()
   end
 
   to initShape
     let @shape = new THREE.Mesh(
       new THREE.IcosahedronGeometry(1, 1, 1),
-      [
-        new THREE.MeshBasicMaterial({
-          color: randomInt(0xffffff),
-          wireframe: yes
-        })
-      ]
+      new THREE.MeshBasicMaterial({
+        color: randomInt(0xffffff),
+        wireframe: yes
+      })
     )
-    @scene.addObject(@shape)
+    @scene.add(@shape)
   end
 
   to animate

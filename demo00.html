@@ -87,14 +87,12 @@ Let's walk through the code in this first example and see exactly what it's doin
       to initShape
         let shape = new THREE.Mesh(
           new THREE.Cube(1, 1, 1),
-          [
-            new THREE.MeshBasicMaterial({
-              color: randomInt(0xffffff),
-              wireframe: yes
-            })
-          ]
+          new THREE.MeshBasicMaterial({
+            color: randomInt(0xffffff),
+            wireframe: yes
+          })
         )
-        @scene.addObject(shape)
+        @scene.add(shape)
       end
     end
 
