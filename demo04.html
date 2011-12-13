@@ -46,7 +46,7 @@ class Demo extends Slogo
         })
       ),
       shape.scale.x = -1
-    @scene.addObject(shape)
+    @scene.add(shape)
   end
 
   to mouseDown |event|
@@ -74,12 +74,13 @@ class Demo extends Slogo
     let
       @lat = max(-85, min(85, @lat)),
       phi = (90 - @lat) * PI / 180,
-      theta = @lon * PI / 180,
-      @camera.target.position = {
-        x: 20 * sin(phi) * cos(theta),      
-        y: 20 * cos(phi),
-        z: 20 * sin(phi) * sin(theta)
-      }
+      theta = @lon * PI / 180
+
+    @camera.lookAt({
+      x: 20 * sin(phi) * cos(theta),      
+      y: 20 * cos(phi),
+      z: 20 * sin(phi) * sin(theta)
+    })
     parent.call(@)
   end
 end
@@ -93,6 +94,7 @@ $(demo.container).mousedown(
   demo.bind('mouseMove')
 )
 demo.animate()
+
 </textarea>
         </section>
 

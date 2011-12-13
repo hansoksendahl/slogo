@@ -35,7 +35,7 @@ class Demo extends Slogo
 
   to initLight
     let light = new THREE.PointLight(0xFFFFFF)
-    @scene.addLight(light)
+    @scene.add(light)
   end
 
   to initShapes
@@ -46,22 +46,23 @@ class Demo extends Slogo
     let
       shape = new THREE.Mesh(
         new THREE.SphereGeometry(1, 20, 20),
-        [
-          new THREE.MeshPhongMaterial({color: randomInt(0xffffff)})
-        ]
+        new THREE.MeshPhongMaterial({
+          color: randomInt(0xffffff)
+        })
       ),
       shape.position = {
         x: random() * 20 - 10,
         y: random() * 20 - 10,
         z: random() * 20 - 10
       }
-    @scene.addObject(shape)
+    @scene.add(shape)
   end
 
   to animate
     set
-      @camera.position.z = 20 * sin(@counter * 1%),
-      @camera.position.x = 20 * cos(@counter * 1%)
+      @camera.position.z = 30 * sin(@counter * 1%),
+      @camera.position.x = 30 * cos(@counter * 1%)
+    @camera.lookAt({x: 0, y: 0, z: 0})
     parent.call(@)
     set @counter += 1
   end
@@ -69,6 +70,7 @@ end
 
 let demo = new Demo()
 demo.animate()
+
 </textarea>
         </section>
 
