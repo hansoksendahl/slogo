@@ -11,8 +11,8 @@
 //       @renderer  = new THREE.WebGLRenderer(),
 //       @scene     = new THREE.Scene(),
 //       @camera    = new THREE.Camera(
-//         80,
-//         container.offsetWidth / container.offsetHeight,
+//         45,
+//         @container.offsetWidth / @container.offsetHeight,
 //         1,
 //         100
 //       )
@@ -48,7 +48,7 @@ var Slogo = (function () {
     this["container"] = document["getElementById"](container);
     this["renderer"] = new THREE["WebGLRenderer"]();
     this["scene"] = new THREE["Scene"]();
-    this["camera"] = new THREE["PerspectiveCamera"](45, container["offsetWidth"] / container["offsetHeight"], 1, 100);
+    this["camera"] = new THREE["PerspectiveCamera"](45, this.container["offsetWidth"] / this.container["offsetHeight"], 1, 100);
     
     this["renderer"]["setSize"](this["container"]["offsetWidth"], this["container"]["offsetHeight"]);
     this["container"]["appendChild"](this["renderer"]["domElement"]);
