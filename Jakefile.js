@@ -1,4 +1,4 @@
-var sys = require('sys'),
+var sys = require('util'),
     ps  = require('child_process'),
     fs  = require('fs');
 
