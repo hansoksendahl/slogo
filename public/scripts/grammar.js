@@ -1122,6 +1122,8 @@ parse: function parse(input) {
         recovering = 0,
         TERROR = 2,
         EOF = 1;
+        
+    input += '\n';
 
     //this.reductionCount = this.shiftCount = 0;
 
