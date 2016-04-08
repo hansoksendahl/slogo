@@ -13,9 +13,9 @@ simulations.
 
 Slogo Links
 
-* [Grammar Specification](http://hansoksendahl.github.io/Slogo)
-* [Annotated Source](http://hansoksendahl.github.io/Slogo/docs/grammar.html)
-* [Try Slogo](http://hansoksendahl.github.io/Slogo/app.html) 
+* [Grammar Specification](http://hansoksendahl.github.io/slogo)
+* [Annotated Source](http://hansoksendahl.github.io/slogo/docs/grammar.html)
+* [Try Slogo](http://hansoksendahl.github.io/slogo/app.html) 
  
 Prerequisites to get involved.
 
