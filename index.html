@@ -6,7 +6,7 @@
   <head>
     <title>Slogo: A programming language with a healthy dose of slugs</title>
     <link type="text/css" href="./public/styles/import.css" rel="stylesheet">
-    <link type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.11/themes/south-street/jquery-ui.css" rel="stylesheet">
+    <link type="text/css" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.11/themes/south-street/jquery-ui.css" rel="stylesheet">
   </head>
 
   <body>
@@ -29,7 +29,7 @@
 **Slogo** is a multi-agent programmable modelling environment for WebGL.  Slogo
 provides an <abbr title="Application Programming Interface">API</abbr> and 
 graphics framework for producing hardware-accelerated
-[turtle graphics](http://en.wikipedia.org/wiki/Turtle_graphics).
+[turtle graphics](https://en.wikipedia.org/wiki/Turtle_graphics).
 
 _Note: The specification is still under development (pre-alpha)._
 
@@ -44,7 +44,7 @@ Slogo the slug
         <textarea class="markdown">
 # Slogo
 
-Slogo is a [context-free grammar](http://en.wikipedia.org/wiki/Context_free_grammar)
+Slogo is a [context-free grammar](https://en.wikipedia.org/wiki/Context_free_grammar)
 which leverages several existing Javascript libraries.
 
 Most notable of these libraries are:
@@ -61,31 +61,31 @@ parsing the specified grammar.
 
 Jison has modes to recognize languages described by the following grammars:
 
-* [LALR(1)](http://en.wikipedia.org/wiki/LALR_parser)
-* [LR(0)](http://en.wikipedia.org/wiki/LR_parser)
-* [SLR(1)](http://en.wikipedia.org/wiki/SLR_grammar)
-* [LR(1)](http://en.wikipedia.org/wiki/Canonical_LR_parser) _canonical LR parsers_
+* [LALR(1)](https://en.wikipedia.org/wiki/LALR_parser)
+* [LR(0)](https://en.wikipedia.org/wiki/LR_parser)
+* [SLR(1)](https://en.wikipedia.org/wiki/SLR_grammar)
+* [LR(1)](https://en.wikipedia.org/wiki/Canonical_LR_parser) _canonical LR parsers_
 
 It also has a special mode for generating
-[LL(1)](http://en.wikipedia.org/wiki/LL_parser) parse tables
+[LL(1)](https://en.wikipedia.org/wiki/LL_parser) parse tables
 
 > ## Bison
 >
-> Jison is modeled after [Bison](http://www.gnu.org/software/bison/) a parser
+> Jison is modeled after [Bison](https://www.gnu.org/software/bison/) a parser
 > generator for the C progamming language.  Bison is a parser generator that
 > converts an annotated context-free grammar into an LALR(1) or
-> [GLR](http://en.wikipedia.org/wiki/Glr_parser) parser for that grammar.
+> [GLR](https://en.wikipedia.org/wiki/Glr_parser) parser for that grammar.
 
 # WebGL
 
-[WebGL](http://en.wikipedia.org/wiki/WebGL) is a recently released specification
+[WebGL](https://en.wikipedia.org/wiki/WebGL) is a recently released specification
 for modern browsers.  It extends Javascript with the ability to generate 3D
 graphics.  WebGL enables the creation of hardware-accelerated graphics as it
 communicates directly to the <abbr title="Graphics Processing Unit">GPU</abbr>
 on the host computer.
 
 Slogo makes use of Jison's ability to share the scope of a grammar with other
-parts of Javascript via the [`yy` variable](http://zaach.github.com/jison/docs/#sharing-scope).
+parts of Javascript via the [`yy` variable](https://zaach.github.com/jison/docs/#sharing-scope).
 When a Slogo program is parsed it makes direct calls to WebGL via the Slogo
 graphics framework.
         </textarea>
@@ -131,7 +131,7 @@ and develop code secondarily.
 
         50% # returns 0.50
 
-5. The [`modulus`](http://en.wikipedia.org/wiki/Modulo_operation) operator is 
+5. The [`modulus`](https://en.wikipedia.org/wiki/Modulo_operation) operator is 
     still an operator but it has a longer name
 
         3 mod 2 # returns 1
@@ -254,8 +254,8 @@ Just [click here](./app.html) to get started.
     <!-- We're going jQuery this round -->
 
     <!-- Include jQuery & jQuery UI -->
-    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
-    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.11/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.11/jquery-ui.min.js"></script>
 
     <!-- Include our scripts and plugins -->
 
